@@ -22,6 +22,7 @@ FSMC3::Handler::Handler(FSMC3::Controller *controller_in, FSMC3::Communicator *c
 
 void FSMC3::Handler::processLoop()
 {
+	communicator->processLoop();
 	if (communicator->checkForData()) {
 		parser.parseBuffer(communicator->getBuffer());
 		switch (parser.getMode())
@@ -52,4 +53,5 @@ void FSMC3::Handler::processLoop()
 		}
 		communicator->clearData();
 	}
+	controller->processLoop();
 }

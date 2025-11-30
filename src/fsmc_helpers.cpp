@@ -19,5 +19,5 @@ int16_t FSMC3::Helpers::mapDoubleToInt16(double target, double fromLow, double f
 	if (target > fromHigh) {
 		return toHigh;
 	}
-	return static_cast<int16_t>((target - static_cast<int16_t>(fromLow)) * (toHigh - toLow) / (static_cast<int16_t>(fromHigh) - static_cast<int16_t>(fromLow)) + toLow);;
+	return static_cast<int16_t>((target - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow);
 }

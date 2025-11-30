@@ -16,9 +16,6 @@
 
 fwversion version(0,0,1);
 
-void report();
-void reportAngles();
-
 FSMC3Config::Hardware hardware;
 
 FSMC3::Communicator communicator(&version);
@@ -27,6 +24,7 @@ FSMC3::Handler handler(&controller, &communicator);
 
 long timestamp = millis();
 uint16_t interval = 100;
+#define DEBUG_AXIS 0
 
 void setup()
 {
@@ -37,7 +35,7 @@ void setup()
 	controller.init();
 
 	// TODO: Remove this hardcoded enable for the only axis I have wired up
-	controller.axes[2].setEnable(0x1);
+	controller.axes[DEBUG_AXIS].setEnable(0x1);
 }
 
 void loop()
@@ -47,27 +45,6 @@ void loop()
 	if (digitalRead(hardware.configSystem.eStopPin)){
 		NVIC_SystemReset();
 	} else {
-		communicator.processLoop();
-		if (communicator.checkForData()) {
-			handler.processLoop();
-		}
-		controller.processLoop();
+		handler.processLoop();
 	}
-	// report();
-}
-
-void report()
-{
-	long now = millis();
-	if (now - timestamp > interval) {
-		// reportAngles();
-		timestamp = millis();
-	}
-}
-
-void reportAngles()
-{
-	Serial.print(controller.axes[2].getAbsoluteAngle(), 5);
-	Serial.print("  |  ");
-	Serial.println(controller.axes[2].getEncoderAngle(), 5);
 }

@@ -23,21 +23,21 @@ namespace FSMC3Config
 		{
 			FSMC3Config::Driver
 			{
-				.enablePin = PB_13,
+				.enablePin = PB13_ALT0,
 				.pwmChAPin = PA_8,		// TIM1 CH1
 				.pwmChBPin = PA_9,		// TIM1 CH2
 				.hwtimer = &hwtimer1
 			},
 			FSMC3Config::Driver
 			{
-				.enablePin = PB_4,
+				.enablePin = PB4_ALT0,
 				.pwmChAPin = PA_5,		// TIM2 CH1
 				.pwmChBPin = PB_3,		// TIM2 CH2
 				.hwtimer = &hwtimer2
 			},
 			FSMC3Config::Driver
 			{
-				.enablePin = PA_4,
+				.enablePin = PA4_ALT0,
 				.pwmChAPin = PA_2,		// TIM2 CH3
 				.pwmChBPin = PA_3,		// TIM2 CH4
 				.hwtimer = &hwtimer2

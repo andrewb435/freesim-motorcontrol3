@@ -40,7 +40,7 @@ void FSMC3::Axis::init()
 
 void FSMC3::Axis::processLoop()
 {
-	if (enabled) {
+	if (isEnabled) {
 		pidInput = position.processLoop();
 		if (pidController.Compute()) {
 			driver.drive(pidOutput);
@@ -61,10 +61,10 @@ void FSMC3::Axis::setRange(int16_t range_in)
 void FSMC3::Axis::setEnable(int16_t enable_in)
 {
 	if (enable_in > 0) {
-		enabled = true;
+		isEnabled = true;
 		driver.setEnable(true);
 	} else {
-		enabled = false;
+		isEnabled = false;
 		driver.setEnable(false);
 	}
 }

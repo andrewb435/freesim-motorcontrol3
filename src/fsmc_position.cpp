@@ -24,7 +24,7 @@ FSMC3::Position::Position(FSMC3Config::Axis *axisData_in, SPIClass *SPI_in, SPIS
 	posOffset = 0.0f;
 	posMin = 0.9f;
 	posMax = 2.3f;
-	posCenter = 1.6f;
+	posCenter = 1.68f;
 	posCurrent = 0.0f;
 	spi = SPI_in;
 }

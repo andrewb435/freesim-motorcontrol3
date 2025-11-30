@@ -13,7 +13,7 @@ namespace FSMC3
 	class Axis
 	{
 	private:
-		bool enabled;
+		bool isEnabled;
 		uint8_t commandBitDepth;
 		int16_t rangeLow;
 		int16_t rangeCenter;

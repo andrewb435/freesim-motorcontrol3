@@ -12,7 +12,7 @@ namespace FSMC3
 	class Controller
 	{
 	public:
-		Axis axes[ProtocolStructure::MAXIMUM_AXIS_COUNT];
+		FSMC3::Axis axes[ProtocolStructure::MAXIMUM_AXIS_COUNT];
 		FSMC3::ProtocolData dataOutput;
 	
 	public:

@@ -9,7 +9,7 @@ namespace FSMC3
 	class PWMDriver
 	{
 	private:
-		bool enabled;
+		bool isEnabled;
 		uint16_t pinEnable;
 		uint16_t pinPWMA;
 		uint16_t pinPWMB;
