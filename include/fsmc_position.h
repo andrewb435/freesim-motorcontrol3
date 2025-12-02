@@ -4,7 +4,7 @@
 #include "hardware.h"
 #include "encoders/mt6835/MagneticSensorMT6835.h"
 #include "encoders/stm32hwencoder/STM32HWEncoder.h"
-#include "fsmc_helpers.h"
+#include "fsmc_utils.h"
 
 namespace FSMC3
 {
@@ -22,6 +22,7 @@ namespace FSMC3
 		MagneticSensorMT6835 sensor;
 		STM32HWEncoder encoder;
 		void hwEncoderWorkaround();
+
 	public:
 		Position(FSMC3Config::Axis *axisData_in, SPIClass *SPI_in, SPISettings *spiSettings_in);
 		void init();

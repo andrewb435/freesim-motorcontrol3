@@ -1,7 +1,7 @@
 #ifndef __FSMC_DRIVER_H__
 #define __FSMC_DRIVER_H__
 
-#include <Arduino.h>
+#include <cstdint>
 #include "hw_blackpill.h"
 
 namespace FSMC3
@@ -17,7 +17,7 @@ namespace FSMC3
 		uint8_t channelB;
 		uint16_t pwmFrequency;
 		uint16_t pwmResolution;
-		HardwareTimer* hwtimer;
+		HardwareTimer *hwtimer;
 		int16_t mapFloatToTick(double target, double fromLow, double fromHigh, int16_t toLow, int16_t toHigh);
 
 	public:

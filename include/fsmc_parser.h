@@ -13,9 +13,9 @@ namespace FSMC3
 
 	public:
 		Parser();
-		void parseBuffer(char* buffer_in);
+		void parseBuffer(char *buffer_in);
 		Command getMode();
-		ProtocolData* getData();
+		ProtocolData *getData();
 	};
 };
 

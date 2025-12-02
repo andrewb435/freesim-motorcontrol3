@@ -23,7 +23,8 @@ FSMC3::Handler::Handler(FSMC3::Controller *controller_in, FSMC3::Communicator *c
 void FSMC3::Handler::processLoop()
 {
 	communicator->processLoop();
-	if (communicator->checkForData()) {
+	if (communicator->checkForData())
+	{
 		parser.parseBuffer(communicator->getBuffer());
 		switch (parser.getMode())
 		{
@@ -38,8 +39,8 @@ void FSMC3::Handler::processLoop()
 		case FSMC3::Command::COMMAND_REPORT:
 			cmdReport();
 			break;
-		case FSMC3::Command::COMMAND_SET_CENTER:
-			controller->setCenter(parser.getData());
+		case FSMC3::Command::COMMAND_NUDGE_CENTER:
+			controller->nudgeCenters(parser.getData());
 			break;
 		case FSMC3::Command::COMMAND_SET_P:
 			controller->setP(parser.getData());

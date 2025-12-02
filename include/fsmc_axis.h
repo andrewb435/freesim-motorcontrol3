@@ -1,12 +1,12 @@
 #ifndef __FSMC_AXIS_H__
 #define __FSMC_AXIS_H__
 
-#include "PID_v1.h"
-#include "fsmc_helpers.h"
+#include "fsmc_utils.h"
 #include "fsmc_driver.h"
 #include "fsmc_position.h"
+#include "fsmc_pid.h"
 
-#define NUDGE (PI/180)
+#define NUDGE (PI / 180)
 
 namespace FSMC3
 {
@@ -23,18 +23,19 @@ namespace FSMC3
 		double pidKd;
 		double pidSetpoint;
 		double pidInput;
-		double pidOutput;
-		PID pidController;
+		FSMC3::PID pidController;
 		FSMC3::PWMDriver driver;
 		FSMC3::Position position;
 		void setPIDTunings();
+
 	public:
+		double pidOutput;
 		Axis(FSMC3Config::SystemHW *system_in, FSMC3Config::Axis *axis_in, SPIClass *spi_in);
 		void init();
 		void processLoop();
-		void setCenter();
+		void eepromSetCenter(double data_in);
 		/// @brief Takes total range in degrees (e.g. center = 0, max +40, min -40 = 80 degrees)
-		/// @param range_in 
+		/// @param range_in
 		void setRange(int16_t range_in);
 		/// @brief Enables/Disables axis
 		/// @param enable_in >=1 enable, <=0 disable

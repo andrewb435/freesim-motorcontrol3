@@ -6,7 +6,8 @@
 
 namespace FSMC3Config
 {
-	class Hardware {
+	class Hardware
+	{
 	private:
 		// PWM output timers
 		HardwareTimer hwtimer1;
@@ -22,11 +23,11 @@ namespace FSMC3Config
 
 	public:
 		Hardware();
-		
+
 		// config objects
 		FSMC3Config::SystemHW configSystem;
 		FSMC3Config::Driver configDrivers[FSMC3::ProtocolStructure::MAXIMUM_AXIS_COUNT];
-		FSMC3Config::Axis   configAxes[FSMC3::ProtocolStructure::MAXIMUM_AXIS_COUNT];
+		FSMC3Config::Axis configAxes[FSMC3::ProtocolStructure::MAXIMUM_AXIS_COUNT];
 	};
 }
 #endif // __HW_BLACKPILL_H__

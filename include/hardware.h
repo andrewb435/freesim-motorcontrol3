@@ -1,14 +1,18 @@
 #ifndef __HARDWARE_H__
 #define __HARDWARE_H__
 
-#include <Arduino.h>
-#include "PID_v1.h"
+#include <cstdint>
 #include "SPI.h"
 #include "proto_fsmc3.h"
 
 namespace FSMC3Config
 {
-	enum AxisByName {AXISA, AXISB, AXISC};
+	enum AxisByName
+	{
+		AXISA,
+		AXISB,
+		AXISC
+	};
 	struct SystemHW
 	{
 		uint16_t eStopPin;
@@ -18,24 +22,26 @@ namespace FSMC3Config
 		uint16_t pwmResolution;
 		uint16_t pwmFrequency;
 		uint16_t commandBitDepth;
-		SPISettings* spiSettings;
+		SPISettings *spiSettings;
+		int16_t pidFrequency;
+		int16_t pidLPFCutoff;
 	};
 	struct Driver
 	{
 		uint16_t enablePin;
 		uint16_t pwmChAPin;
 		uint16_t pwmChBPin;
-		HardwareTimer* hwtimer;
+		HardwareTimer *hwtimer;
 	};
 	struct Axis
 	{
 		uint16_t encoderPPR;
 		int16_t encoderPinA;
 		int16_t encoderPinB;
-		HardwareTimer* encoderTimer;
+		HardwareTimer *encoderTimer;
 		int16_t sensorPinCS;
 		uint16_t rangeDegrees;
-		FSMC3Config::Driver* driver;
+		FSMC3Config::Driver *driver;
 	};
 }
 #endif // __HARDWARE_H__

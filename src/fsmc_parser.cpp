@@ -1,11 +1,11 @@
 #include "fsmc_parser.h"
 
-FSMC3::Parser::Parser(){}
+FSMC3::Parser::Parser() {}
 
-void FSMC3::Parser::parseBuffer(char* buffer_in)
+void FSMC3::Parser::parseBuffer(char *buffer_in)
 {
 	// Command type
-	//char buff[ProtocolStructure::MAXIMUM_LENGTH_BYTES] = &buffer_in;
+	// char buff[ProtocolStructure::MAXIMUM_LENGTH_BYTES] = &buffer_in;
 	uint8_t temp = buffer_in[ProtocolStructure::COMMAND_BYTE_POSITION];
 	this->motorCommand = static_cast<Command>(temp);
 	// Data
@@ -30,7 +30,7 @@ FSMC3::Command FSMC3::Parser::getMode()
 	return this->motorCommand;
 }
 
-FSMC3::ProtocolData* FSMC3::Parser::getData()
+FSMC3::ProtocolData *FSMC3::Parser::getData()
 {
 	return &this->data;
 }

@@ -14,34 +14,53 @@ namespace FSMC3
 	public:
 		FSMC3::Axis axes[ProtocolStructure::MAXIMUM_AXIS_COUNT];
 		FSMC3::ProtocolData dataOutput;
-	
+
 	public:
 		/**
 		 * Controller constructor takes a FSMC3Hardware::hardwareConfig (containing
 		 * 1 system-wide configuration block and 3 motor axis definitions), and the SPI bus
-		*/
+		 */
 		Controller(FSMC3Config::Hardware *hardwareConfig_in, SPIClass *spi_in);
 		void init();
 		void processLoop();
-		void setCenter(ProtocolData *data_in);
-		/**
-		 * Sets axis boundary from center in degrees
-		 * 
-		 * 45 = +45 -45 for 90 total
-		 * @param data_in FSMC3::ProtocolData with n int16_t data fields each containing
-		 * an axis. Zero is ignored, >0 is set for that respective axis
+
+		/*
+		SETTER FUNCTIONS
 		*/
-		void setMaxAngle(ProtocolData *data_in);
+		/// @brief Sets axis ranges by total range in degrees; e.g. 80 = +40 and -40 from center
+		/// @param data_in ProtocolData containing [axis count]{int16_t} total travel rotation in degrees
+		void setRanges(ProtocolData *data_in);
+		/// @brief Sets enable flags on axes, >0 is enabled, <=0 is disabled
+		/// @param data_in ProtocolData containing [axis count]{int16_t} enabled (>0) or disabled (<=0)
 		void setEnables(ProtocolData *data_in);
-		// double getAbsoluteRadians();
-		// double getEncoderRadians();
+		/// @brief Sets move targets for the axes from 0 to (2^commandBitDepth - 1),
+		/// e.g hardwareConfig.configSystem.commandBitDepth = 12 means the range is 0-4095
+		/// @param data_in ProtocolData containing [axis count]{int16_t} move target within the range
+		void setMoveTargets(ProtocolData *data_in);
+		/// @brief Nudge centerpoints +- 1 degree
+		/// @param data_in ProtocolData containing [axis count]{int16_t} positive nudges +1 degree, negative nudges -1 degree
+		void nudgeCenters(ProtocolData *data_in);
+		/// @brief Set P value of axes PID controllers
+		/// @param data_in ProtocolData containing [axis count]{int16_t}
+		void setP(ProtocolData *data_in);
+		/// @brief Set I value of axes PID controllers
+		/// @param data_in ProtocolData containing [axis count]{int16_t}
+		void setI(ProtocolData *data_in);
+		/// @brief Set D value of axes PID controllers
+		/// @param data_in ProtocolData containing [axis count]{int16_t}
+		void setD(ProtocolData *data_in);
+
+		/*
+		REPORTING FUNCTIONS
+		*/
 		FSMC3::ProtocolData *getAbsoluteAngles16();
 		FSMC3::ProtocolData *getEncoderAngles16();
 		FSMC3::ProtocolData *getMoveTargets16();
-		void setMoveTargets(ProtocolData *data_in);
-		void setP(ProtocolData *data_in);
-		void setI(ProtocolData *data_in);
-		void setD(ProtocolData *data_in);
+
+		/*
+		EEPROM FUNCTIONS
+		*/
+		void eepromSetCenters(ProtocolDataDoubles *data_in);
 	};
 };
 #endif

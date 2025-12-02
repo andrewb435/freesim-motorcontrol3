@@ -5,7 +5,7 @@
 
 namespace FSMC3
 {
-	class Helpers
+	class Utils
 	{
 	public:
 		static double mapInt16ToDouble(int16_t target, int16_t fromLow, int16_t fromHigh, double toLow, double toHigh);
