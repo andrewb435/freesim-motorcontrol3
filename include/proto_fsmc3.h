@@ -8,17 +8,39 @@ namespace FSMC3
 {
 	enum class Command : uint8_t
 	{
-		COMMAND_NONE = 0x7E,		 // "~"
-		COMMAND_ENABLE = 0x4E,		 // "N"
-		COMMAND_MOVE = 0x4D,		 // "M"
-		COMMAND_REPORT = 0x52,		 // "R"
-		COMMAND_NUDGE_CENTER = 0x43, // "C"
-		COMMAND_SET_P = 0x50,		 // "P"
-		COMMAND_SET_I = 0x49,		 // "I"
-		COMMAND_SET_D = 0x44,		 // "D"
-		COMMAND_EEPROM_SAVE = 0x58,	 // "X"
-		COMMAND_EEPROM_LOAD = 0x59,	 // "Y"
-		COMMAND_EEPROM_WIPE = 0x5A	 // "Z"
+		COMMAND_NONE = 0x7E, // "~"
+		/// @brief Instruction character [ "N" ] for setting an axis to enabled or
+		/// disabled state.
+		COMMAND_ENABLE = 0x4E, // "N"
+		/// @brief Instruction character [ "M" ] for requesting a move from the
+		/// controller. Values expected are a signed 16 bit integer describing the
+		/// position within the maximum range of the axis.
+		COMMAND_MOVE = 0x4D,
+		/// @brief Instruction character [ "R" ] for requesting a full update report
+		/// from the controller
+		COMMAND_REPORT = 0x52,
+		/// @brief Instruction character [ "C" ] for nudging the centerpoint:
+		/// Values are a signed 16 bit integer instructing a number of degrees
+		/// (positive or negative) to adjust the centerpoint by. This is clamped
+		/// by the controller to +-10 degrees max per command. (e.g. 0x0001 would
+		/// instruct the controller to move the centerpoint +1 degree where 0xFFFF
+		/// would command -1 degree)
+		COMMAND_NUDGE_CENTER = 0x43,
+		/// @brief Instruction character [ "P" ] for setting the P tuning value:
+		/// Values will still be signed 16 bit integer but describing a double
+		/// within a range set in fsmc_pid.h
+		COMMAND_SET_P = 0x50,
+		/// @brief Instruction character [ "I" ] for setting the I tuning value:
+		/// Values will still be signed 16 bit integer but describing a double
+		/// within a range set in fsmc_pid.h
+		COMMAND_SET_I = 0x49,
+		/// @brief Instruction character [ "D" ] for setting the D tuning value:
+		/// Values will still be signed 16 bit integer but describing a double
+		/// within a range set in fsmc_pid.h
+		COMMAND_SET_D = 0x44,
+		COMMAND_EEPROM_SAVE = 0x58, // "X"
+		COMMAND_EEPROM_LOAD = 0x59, // "Y"
+		COMMAND_EEPROM_WIPE = 0x5A	// "Z"
 	};
 	enum class Outputs : uint8_t
 	{

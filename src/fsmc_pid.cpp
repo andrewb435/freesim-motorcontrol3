@@ -1,25 +1,23 @@
 /*
 FSMC PID Library
-
 Based on Arduino PID_v1 by Brett Beauregard <br3ttb@gmail.com> brettbeauregard.com
 	https://github.com/br3ttb/Arduino-PID-Library/
-as well as the SimpleFOC low pass filter by the SimpleFOC Arduino team
-	https://github.com/simplefoc/Arduino-FOC
-
 MIT License
 */
+
 #include "Arduino.h"
 #include "fsmc_pid.h"
+#include "fsmc_utils.h"
 
 void FSMC3::PID::init()
 {
-	outputSum = *myOutput;
+	outIntegral = *myOutput;
 	lastInput = *myInput;
-	if (outputSum > outMax)
-		outputSum = outMax;
-	else if (outputSum < outMin)
-		outputSum = outMin;
-	lpfCalcTimeConstant();
+	if (outIntegral > outMax)
+		outIntegral = outMax;
+	else if (outIntegral < outMin)
+		outIntegral = outMin;
+	filter.lpfCalcTimeConstant();
 }
 
 bool FSMC3::PID::checkTimer()
@@ -32,21 +30,11 @@ bool FSMC3::PID::checkTimer()
 		return false;
 }
 
-void FSMC3::PID::doLPF()
-{
-	lpfAlpha = lpfTimeConstant / (lpfTimeConstant + diffTime);
-	lpfOutput = lpfAlpha * lastOutput + (1.0f - lpfAlpha) * wOutput;
-	lastOutput = lpfOutput;
-	wOutput = lpfOutput;
-}
-
-void FSMC3::PID::lpfCalcTimeConstant()
-{
-	lpfTimeConstant = 1.0 / lpfCutoffFreq;
-}
-
 FSMC3::PID::PID(double *input, double *output, double *setpoint,
 				double kp_in, double ki_in, double kd_in)
+	: filter{
+		  &diffTime,
+		  &wOutput}
 {
 	myOutput = output;
 	myInput = input;
@@ -62,8 +50,6 @@ FSMC3::PID::PID(double *input, double *output, double *setpoint,
 	lastTime = micros() - intervalTime;
 
 	// Low pass filter
-	lpfCutoffFreq = 100;
-	lpfEnabled = true;
 }
 
 bool FSMC3::PID::compute()
@@ -74,18 +60,18 @@ bool FSMC3::PID::compute()
 		wInput = *myInput;
 		wError = *mySetpoint - wInput;
 		wInputDerivative = (wInput - lastInput);
-		outputSum += (ki * wError);
+		outIntegral += (ki * wError);
 
-		if (outputSum > outMax)
-			outputSum = outMax;
-		else if (outputSum < outMin)
-			outputSum = outMin;
+		if (outIntegral > outMax)
+			outIntegral = outMax;
+		else if (outIntegral < outMin)
+			outIntegral = outMin;
 
 		// Start with proportional on error
 		wOutput = kp * wError;
 
 		// Add integral
-		wOutput += outputSum;
+		wOutput += outIntegral;
 
 		// Subtract derivative
 		wOutput -= (kd * wInputDerivative);
@@ -97,8 +83,8 @@ bool FSMC3::PID::compute()
 			wOutput = outMin;
 
 		// Run low-pass filter if enabled
-		if (lpfEnabled)
-			doLPF();
+		if (filter.getEnabled())
+			filter.doFilter();
 
 		*myOutput = wOutput;
 
@@ -125,10 +111,10 @@ void FSMC3::PID::setOutputLimits(double lowerBound_in, double upperBound_in)
 	else if (*myOutput < outMin)
 		*myOutput = outMin;
 
-	if (outputSum > outMax)
-		outputSum = outMax;
-	else if (outputSum < outMin)
-		outputSum = outMin;
+	if (outIntegral > outMax)
+		outIntegral = outMax;
+	else if (outIntegral < outMin)
+		outIntegral = outMin;
 }
 
 void FSMC3::PID::setTunings(double kp_in, double ki_in, double kd_in)
@@ -155,15 +141,27 @@ void FSMC3::PID::setIntervalTime(int intervalMicros_in)
 	}
 }
 
-void FSMC3::PID::setLPF(bool lpfEnabled_in)
+void FSMC3::PID::setFilterCutoffFreq(int16_t lpfCutoffFreq_in)
 {
-	lpfEnabled = lpfEnabled_in;
+	filter.setCutoffFreq(lpfCutoffFreq_in);
 }
 
-void FSMC3::PID::setLPFCutoffFreq(int16_t lpfCutoffFreq_in)
+void FSMC3::PID::setKp(int16_t kp_in)
 {
-	lpfCutoffFreq = lpfCutoffFreq_in;
-	lpfCalcTimeConstant();
+	rawKp = FSMC3::Utils::mapInt16ToDouble(kp_in, FSMC3::Utils::INT16_LO, FSMC3::Utils::INT16_HI, 0.0f, 10.0f);
+	setTunings(rawKp, rawKi, rawKd);
+}
+
+void FSMC3::PID::setKi(int16_t ki_in)
+{
+	rawKi = FSMC3::Utils::mapInt16ToDouble(ki_in, FSMC3::Utils::INT16_LO, FSMC3::Utils::INT16_HI, 0.0f, 1.0f);
+	setTunings(rawKp, rawKi, rawKd);
+}
+
+void FSMC3::PID::setKd(int16_t kd_in)
+{
+	rawKd = FSMC3::Utils::mapInt16ToDouble(kd_in, FSMC3::Utils::INT16_LO, FSMC3::Utils::INT16_HI, 0.0f, 1.0f);
+	setTunings(rawKp, rawKi, rawKd);
 }
 
 // Status Funcions

@@ -28,7 +28,7 @@ FSMC3::Axis::Axis(FSMC3Config::SystemHW *system_in,
 	rangeCenter = rangeHigh / 2;
 	setRange(axis_in->rangeDegrees);
 	pidController.setIntervalTime(system_in->pidFrequency);
-	pidController.setLPFCutoffFreq(system_in->pidLPFCutoff);
+	pidController.setFilterCutoffFreq(system_in->pidLPFCutoff);
 }
 
 void FSMC3::Axis::init()

@@ -2,14 +2,13 @@
 #define __FSMC_PID_H__
 /*
 FSMC PID Library
-
 Based on Arduino PID_v1 by Brett Beauregard <br3ttb@gmail.com> brettbeauregard.com
 	https://github.com/br3ttb/Arduino-PID-Library/
-as well as the SimpleFOC low pass filter by the SimpleFOC Arduino team
-	https://github.com/simplefoc/Arduino-FOC
-
 MIT License
 */
+
+#include "fsmc_lowpassfilter.h"
+
 namespace FSMC3
 {
 	class PID
@@ -30,30 +29,17 @@ namespace FSMC3
 		double *myInput;
 		double *myOutput;
 		double *mySetpoint;
-
 		// Various timers
 		unsigned long lastTime, nowTime, diffTime, intervalTime;
-
-		double outputSum, lastInput;
-
+		double outIntegral, lastInput;
 		// Working variables
 		double wInput, wError, wInputDerivative, wOutput;
-
-		// Low Pass Filter variables
-		// Follows PID calculation frequency
-		bool lpfEnabled;
-		double lastOutput;
-		double lpfAlpha;
-		double lpfOutput;
-		double lpfTimeConstant;
-		/// @brief Cutoff frequency in Hz
-		int16_t lpfCutoffFreq;
+		// Filter
+		FSMC3::LowPassFilter filter;
 
 		// Methods
 		void init();
 		bool checkTimer();
-		void doLPF();
-		void lpfCalcTimeConstant();
 
 	public:
 		/// @brief Constructs a PID controller running at a default 10kHz with a default low pass filter @ 100Hz
@@ -74,8 +60,12 @@ namespace FSMC3
 		void setOutputLimits(double lowerBound_in, double upperBound_in);
 		void setTunings(double kp_in, double ki_in, double kd_in);
 		void setIntervalTime(int intervalMicros_in);
-		void setLPF(bool lpfEnabled_in);
-		void setLPFCutoffFreq(int16_t lpfCutoffFreq_in);
+		void setFilterCutoffFreq(int16_t lpfCutoffFreq_in);
+
+		// Tuning functions
+		void setKp(int16_t kp_in); // These functions query the pid for interal values.
+		void setKi(int16_t ki_in); //  they were created mainly for the pid front-end,
+		void setKd(int16_t kd_in); // where it's important to know what is actually
 
 		// Status functions
 		double getKp(); // These functions query the pid for interal values.
