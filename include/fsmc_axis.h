@@ -6,8 +6,6 @@
 #include "fsmc_position.h"
 #include "fsmc_pid.h"
 
-#define NUDGE (PI / 180)
-
 namespace FSMC3
 {
 	class Axis
@@ -18,15 +16,11 @@ namespace FSMC3
 		int16_t rangeLow;
 		int16_t rangeCenter;
 		int16_t rangeHigh;
-		double pidKp;
-		double pidKi;
-		double pidKd;
 		double pidSetpoint;
 		double pidInput;
 		FSMC3::PID pidController;
 		FSMC3::PWMDriver driver;
 		FSMC3::Position position;
-		void setPIDTunings();
 
 	public:
 		double pidOutput;
@@ -52,9 +46,18 @@ namespace FSMC3
 		void nudgeCenter(int16_t nudge_in);
 		double getAbsoluteAngle();
 		double getEncoderAngle();
+
 		int16_t getAbsoluteAngle16();
 		int16_t getEncoderAngle16();
 		int16_t getMoveTarget16();
+		int16_t getAxisP();
+		int16_t getAxisI();
+		int16_t getAxisD();
+	};
+	namespace AxisConst
+	{
+		static const double NUDGE_RAD = (PI / 180);
+		static const double NUDGE_MAX = 10;
 	};
 }
 #endif // __FSMC_AXIS_H__

@@ -40,12 +40,18 @@ FSMC3::PID::PID(double *input, double *output, double *setpoint,
 	myInput = input;
 	mySetpoint = setpoint;
 
+	rawKp = kp_in;
+	rawKi = ki_in;
+	rawKd = kd_in;
+
 	// Default limits
-	PID::setOutputLimits(-1.0f, 1.0f);
+	PID::setOutputLimits(
+		PIDConst::MOVETARGET_MIN,
+		PIDConst::MOVETARGET_MAX);
 	// Default interval (microseconds) 100 = 10KHz
 	intervalTime = 100;
 	// set incoming tunings
-	PID::setTunings(kp_in, ki_in, kd_in);
+	PID::setTunings();
 	// timestamp to start
 	lastTime = micros() - intervalTime;
 
@@ -117,19 +123,15 @@ void FSMC3::PID::setOutputLimits(double lowerBound_in, double upperBound_in)
 		outIntegral = outMin;
 }
 
-void FSMC3::PID::setTunings(double kp_in, double ki_in, double kd_in)
+void FSMC3::PID::setTunings()
 {
-	if (kp_in < 0 || ki_in < 0 || kd_in < 0)
+	if (rawKp < 0 || rawKi < 0 || rawKd < 0)
 		return;
 
-	rawKp = kp_in;
-	rawKi = ki_in;
-	rawKd = kd_in;
-
 	double intervalTimeInSec = (static_cast<double>(intervalTime)) / 1000000;
-	kp = kp_in;
-	ki = ki_in * intervalTimeInSec;
-	kd = kd_in / intervalTimeInSec;
+	kp = rawKp;
+	ki = rawKi * intervalTimeInSec;
+	kd = rawKd / intervalTimeInSec;
 }
 
 void FSMC3::PID::setIntervalTime(int intervalMicros_in)
@@ -137,7 +139,7 @@ void FSMC3::PID::setIntervalTime(int intervalMicros_in)
 	if (intervalMicros_in > 0)
 	{
 		intervalTime = static_cast<unsigned long>(intervalMicros_in);
-		setTunings(rawKp, rawKi, rawKd);
+		setTunings();
 	}
 }
 
@@ -148,20 +150,34 @@ void FSMC3::PID::setFilterCutoffFreq(int16_t lpfCutoffFreq_in)
 
 void FSMC3::PID::setKp(int16_t kp_in)
 {
-	rawKp = FSMC3::Utils::mapInt16ToDouble(kp_in, FSMC3::Utils::INT16_LO, FSMC3::Utils::INT16_HI, 0.0f, 10.0f);
-	setTunings(rawKp, rawKi, rawKd);
+	rawKp = FSMC3::Utils::mapInt16ToDouble(
+		kp_in,
+		FSMC3::Utils::INT16_LO,
+		FSMC3::Utils::INT16_HI,
+		PIDConst::KPID_LO,
+		PIDConst::KP_HI);
+	setTunings();
 }
 
 void FSMC3::PID::setKi(int16_t ki_in)
 {
-	rawKi = FSMC3::Utils::mapInt16ToDouble(ki_in, FSMC3::Utils::INT16_LO, FSMC3::Utils::INT16_HI, 0.0f, 1.0f);
-	setTunings(rawKp, rawKi, rawKd);
+	rawKi = FSMC3::Utils::mapInt16ToDouble(
+		ki_in, FSMC3::Utils::INT16_LO,
+		FSMC3::Utils::INT16_HI,
+		PIDConst::KPID_LO,
+		PIDConst::KI_HI);
+	setTunings();
 }
 
 void FSMC3::PID::setKd(int16_t kd_in)
 {
-	rawKd = FSMC3::Utils::mapInt16ToDouble(kd_in, FSMC3::Utils::INT16_LO, FSMC3::Utils::INT16_HI, 0.0f, 1.0f);
-	setTunings(rawKp, rawKi, rawKd);
+	rawKd = FSMC3::Utils::mapInt16ToDouble(
+		kd_in,
+		FSMC3::Utils::INT16_LO,
+		FSMC3::Utils::INT16_HI,
+		PIDConst::KPID_LO,
+		PIDConst::KD_HI);
+	setTunings();
 }
 
 // Status Funcions

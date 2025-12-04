@@ -6,12 +6,9 @@ void FSMC3::Handler::cmdReport()
 	communicator.reportData(FSMC3::Outputs::OUTPUT_SPI_POSITION, controller.getAbsoluteAngles16());
 	communicator.reportData(FSMC3::Outputs::OUTPUT_ABZ_POSITION, controller.getEncoderAngles16());
 	communicator.reportData(FSMC3::Outputs::OUTPUT_TARGET, controller.getMoveTargets16());
-	// communicator.reportData(FSMC3::Outputs::OUTPUT_POSITION, controller.getMovePositions());
-	// communicator.reportData(FSMC3::Outputs::OUTPUT_LOWER_LIMIT, controller.getLowerLimits());
-	// communicator.reportData(FSMC3::Outputs::OUTPUT_UPPER_LIMIT, controller.getUpperLimits());
-	// communicator.reportData(FSMC3::Outputs::OUTPUT_P, controller.getMotorP());
-	// communicator.reportData(FSMC3::Outputs::OUTPUT_I, controller.getMotorI());
-	// communicator.reportData(FSMC3::Outputs::OUTPUT_D, controller.getMotorD());
+	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_P, controller.getAxisP());
+	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_I, controller.getAxisI());
+	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_D, controller.getAxisD());
 }
 
 FSMC3::Handler::Handler(FSMC3Config::Hardware *hardware_in, FSMC3Config::fwversion *version_in, SPIClass *SPI_in)
@@ -20,10 +17,6 @@ FSMC3::Handler::Handler(FSMC3Config::Hardware *hardware_in, FSMC3Config::fwversi
 	  controller{hardware_in, SPI_in}
 {
 	hardware = hardware_in;
-	SPI_in->setMISO(hardware->configSystem.SPI_CIPO);
-	SPI_in->setMOSI(hardware->configSystem.SPI_COPI);
-	SPI_in->setSCLK(hardware->configSystem.SPI_SCLK);
-	SPI_in->begin();
 }
 
 void FSMC3::Handler::init()
@@ -31,6 +24,7 @@ void FSMC3::Handler::init()
 	SPI.setMISO(hardware->configSystem.SPI_CIPO);
 	SPI.setMOSI(hardware->configSystem.SPI_COPI);
 	SPI.setSCLK(hardware->configSystem.SPI_SCLK);
+	controller.init();
 }
 
 void FSMC3::Handler::processLoop()

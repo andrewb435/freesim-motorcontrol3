@@ -56,6 +56,9 @@ namespace FSMC3
 		FSMC3::ProtocolData *getAbsoluteAngles16();
 		FSMC3::ProtocolData *getEncoderAngles16();
 		FSMC3::ProtocolData *getMoveTargets16();
+		FSMC3::ProtocolData *getAxisP();
+		FSMC3::ProtocolData *getAxisI();
+		FSMC3::ProtocolData *getAxisD();
 
 		/*
 		EEPROM FUNCTIONS

@@ -123,6 +123,33 @@ FSMC3::ProtocolData *FSMC3::Controller::getMoveTargets16()
 	return &this->dataOutput;
 }
 
+FSMC3::ProtocolData *FSMC3::Controller::getAxisP()
+{
+	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
+	{
+		this->dataOutput.data[i] = this->axes[i].getAxisP();
+	}
+	return &this->dataOutput;
+}
+
+FSMC3::ProtocolData *FSMC3::Controller::getAxisI()
+{
+	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
+	{
+		this->dataOutput.data[i] = this->axes[i].getAxisI();
+	}
+	return &this->dataOutput;
+}
+
+FSMC3::ProtocolData *FSMC3::Controller::getAxisD()
+{
+	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
+	{
+		this->dataOutput.data[i] = this->axes[i].getAxisD();
+	}
+	return &this->dataOutput;
+}
+
 void FSMC3::Controller::setMoveTargets(ProtocolData *data_in)
 {
 	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)

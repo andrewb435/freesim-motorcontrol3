@@ -14,32 +14,40 @@ namespace FSMC3
 	class PID
 	{
 	private:
-		// Hold raw tuning values for re-calculations and getters
-		double rawKp;
-		double rawKi;
-		double rawKd;
+		// Raw tuning values
+		double rawKp, rawKi, rawKd;
+
 		// Internal tuning values (scaled to intervalTime)
-		double kp; // * (P)roportional Tuning Parameter
-		double ki; // * (I)ntegral Tuning Parameter
-		double kd; // * (D)erivative Tuning Parameter
-		// Output limiters
+		double kp; // (P)roportional Tuning Parameter
+		double ki; // (I)ntegral Tuning Parameter
+		double kd; // (D)erivative Tuning Parameter
+
+		// Output limiter
 		double outMin, outMax;
+
 		// Pointers to the user input/output/setpoint parameters provided during construction
 		// Intended to reduce the calls into the PID controller for simple access
+
 		double *myInput;
 		double *myOutput;
 		double *mySetpoint;
-		// Various timers
+
+		// timer
 		unsigned long lastTime, nowTime, diffTime, intervalTime;
 		double outIntegral, lastInput;
-		// Working variables
+
+		// working var
 		double wInput, wError, wInputDerivative, wOutput;
+
 		// Filter
+
 		FSMC3::LowPassFilter filter;
 
 		// Methods
+
 		void init();
 		bool checkTimer();
+		void setTunings();
 
 	public:
 		/// @brief Constructs a PID controller running at a default 10kHz with a default low pass filter @ 100Hz
@@ -58,19 +66,35 @@ namespace FSMC3
 		bool compute();
 
 		void setOutputLimits(double lowerBound_in, double upperBound_in);
-		void setTunings(double kp_in, double ki_in, double kd_in);
 		void setIntervalTime(int intervalMicros_in);
 		void setFilterCutoffFreq(int16_t lpfCutoffFreq_in);
 
 		// Tuning functions
-		void setKp(int16_t kp_in); // These functions query the pid for interal values.
-		void setKi(int16_t ki_in); //  they were created mainly for the pid front-end,
-		void setKd(int16_t kd_in); // where it's important to know what is actually
+
+		void setKp(int16_t kp_in);
+		void setKi(int16_t ki_in);
+		void setKd(int16_t kd_in);
 
 		// Status functions
-		double getKp(); // These functions query the pid for interal values.
-		double getKi(); //  they were created mainly for the pid front-end,
-		double getKd(); // where it's important to know what is actually
+
+		double getKp();
+		double getKi();
+		double getKd();
+	};
+	namespace PIDConst
+	{
+		static const double KP_HI = 10.0f;
+		static const double KPID_LO = 0.0f;
+		static const double KI_HI = 1.0f;
+		static const double KD_HI = 1.0f;
+		static const double MOVETARGET_MIN = -1.0f;
+		static const double MOVETARGET_MAX = 1.0f;
+	};
+	namespace PIDTuneDefault
+	{
+		static const double DEFAULT_P = 1.0f;
+		static const double DEFAULT_I = 0.01f;
+		static const double DEFAULT_D = 0.01f;
 	};
 }
 #endif // __FSMC_PID_H__

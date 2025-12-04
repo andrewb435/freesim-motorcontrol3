@@ -1,10 +1,5 @@
 #include "fsmc_axis.h"
 
-void FSMC3::Axis::setPIDTunings()
-{
-	pidController.setTunings(pidKp, pidKi, pidKd);
-}
-
 FSMC3::Axis::Axis(FSMC3Config::SystemHW *system_in,
 				  FSMC3Config::Axis *axis_in,
 				  SPIClass *SPI_in)
@@ -12,14 +7,11 @@ FSMC3::Axis::Axis(FSMC3Config::SystemHW *system_in,
 		  &pidInput,
 		  &pidOutput,
 		  &pidSetpoint,
-		  pidKp,
-		  pidKi,
-		  pidKd},
+		  FSMC3::PIDTuneDefault::DEFAULT_P,
+		  FSMC3::PIDTuneDefault::DEFAULT_I,
+		  FSMC3::PIDTuneDefault::DEFAULT_D},
 	  driver{axis_in->driver, system_in}, position{axis_in, SPI_in, system_in->spiSettings}
 {
-	pidKp = 1.0f;
-	pidKi = 0.01f;
-	pidKd = 0.01f;
 	pidSetpoint = 0.0;
 	pidInput = 0.0;
 	pidOutput = 0.0;
@@ -37,7 +29,6 @@ void FSMC3::Axis::init()
 	position.init();
 	pidSetpoint = position.getPositionCenter();
 	pidController.setOutputLimits(-1.0f, 1.0f);
-	pidController.setTunings(this->pidKp, this->pidKi, this->pidKd);
 }
 
 void FSMC3::Axis::processLoop()
@@ -46,9 +37,7 @@ void FSMC3::Axis::processLoop()
 	{
 		pidInput = position.processLoop();
 		if (pidController.compute())
-		{
 			driver.drive(pidOutput);
-		}
 	}
 }
 
@@ -83,35 +72,29 @@ void FSMC3::Axis::setMoveTarget(int16_t target_in)
 
 void FSMC3::Axis::setP(int16_t valP_in)
 {
-	// TODO: This will definitely need some kind of division to make sense with the PID controller
-	pidKp = static_cast<double>(valP_in);
-	setPIDTunings();
+	pidController.setKp(valP_in);
 }
 
 void FSMC3::Axis::setI(int16_t valI_in)
 {
-	// TODO: This will definitely need some kind of division to make sense with the PID controller
-	pidKi = static_cast<double>(valI_in);
-	setPIDTunings();
+	pidController.setKi(valI_in);
 }
 
 void FSMC3::Axis::setD(int16_t valD_in)
 {
-	// TODO: This will definitely need some kind of division to make sense with the PID controller
-	pidKd = static_cast<double>(valD_in);
-	setPIDTunings();
+	pidController.setKd(valD_in);
 }
 
 void FSMC3::Axis::nudgeCenter(int16_t nudge_in)
 {
+	if (nudge_in > 10)
+		nudge_in = 10;
+	if (nudge_in < -10)
+		nudge_in = -10;
 	if (nudge_in > 0)
-	{
-		position.nudgeCenter(NUDGE);
-	}
+		position.nudgeCenter(AxisConst::NUDGE_RAD);
 	else if (nudge_in < 0)
-	{
-		position.nudgeCenter(-1 * NUDGE);
-	}
+		position.nudgeCenter(-1 * AxisConst::NUDGE_RAD);
 }
 
 double FSMC3::Axis::getAbsoluteAngle()
@@ -136,5 +119,40 @@ int16_t FSMC3::Axis::getEncoderAngle16()
 
 int16_t FSMC3::Axis::getMoveTarget16()
 {
-	return FSMC3::Utils::mapDoubleToInt16(pidSetpoint, -1.0, 1.0, rangeLow, rangeHigh);
+	return FSMC3::Utils::mapDoubleToInt16(
+		pidSetpoint,
+		FSMC3::PIDConst::MOVETARGET_MIN,
+		FSMC3::PIDConst::MOVETARGET_MAX,
+		rangeLow,
+		rangeHigh);
+}
+
+int16_t FSMC3::Axis::getAxisP()
+{
+	return FSMC3::Utils::mapDoubleToInt16(
+		pidController.getKp(),
+		FSMC3::PIDConst::KPID_LO,
+		FSMC3::PIDConst::KP_HI,
+		rangeLow,
+		rangeHigh);
+}
+
+int16_t FSMC3::Axis::getAxisI()
+{
+	return FSMC3::Utils::mapDoubleToInt16(
+		pidController.getKi(),
+		FSMC3::PIDConst::KPID_LO,
+		FSMC3::PIDConst::KI_HI,
+		rangeLow,
+		rangeHigh);
+}
+
+int16_t FSMC3::Axis::getAxisD()
+{
+	return FSMC3::Utils::mapDoubleToInt16(
+		pidController.getKd(),
+		FSMC3::PIDConst::KPID_LO,
+		FSMC3::PIDConst::KD_HI,
+		rangeLow,
+		rangeHigh);
 }

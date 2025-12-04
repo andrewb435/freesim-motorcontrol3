@@ -18,6 +18,7 @@ long timestamp = millis();
 long now = millis();
 uint16_t interval = 100;
 #define DEBUG_AXIS 0
+#define DEBUG_ENABLED 0
 void report();
 // End serial debugging variables/functions
 
@@ -41,7 +42,8 @@ void loop()
 	else
 	{
 		handler.processLoop();
-		report();
+		if (DEBUG_ENABLED)
+			report();
 	}
 }
 
