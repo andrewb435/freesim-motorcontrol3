@@ -10,7 +10,7 @@ namespace FSMC3
 	class Communicator
 	{
 	private:
-		fwversion *version;
+		FSMC3Config::fwversion *version;
 		bool hasData;
 		uint8_t bufferIndex;
 		char buffer[ProtocolStructure::MAXIMUM_LENGTH_BYTES] = {0};
@@ -19,8 +19,8 @@ namespace FSMC3
 		void checkBuffer();
 
 	public:
-		Communicator(fwversion *version_in);
-		void setVersion(fwversion *version_in);
+		Communicator(FSMC3Config::fwversion *version_in);
+		void setVersion(FSMC3Config::fwversion *version_in);
 		void processLoop();
 		bool checkForData();
 		char *getBuffer();

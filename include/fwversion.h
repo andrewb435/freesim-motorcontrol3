@@ -3,18 +3,20 @@
 
 #include <cstdint>
 
-struct fwversion
+namespace FSMC3Config
 {
-	uint8_t major = 0;
-	uint8_t minor = 0;
-	uint8_t patch = 0;
-	fwversion() {}
-	fwversion(uint8_t major_in, uint8_t minor_in, uint8_t patch_in)
+	struct fwversion
 	{
-		this->major = major_in;
-		this->minor = minor_in;
-		this->patch = patch_in;
-	}
-};
-
+		uint8_t major = 0;
+		uint8_t minor = 0;
+		uint8_t patch = 0;
+		fwversion() {}
+		fwversion(uint8_t major_in, uint8_t minor_in, uint8_t patch_in)
+		{
+			this->major = major_in;
+			this->minor = minor_in;
+			this->patch = patch_in;
+		}
+	};
+}
 #endif

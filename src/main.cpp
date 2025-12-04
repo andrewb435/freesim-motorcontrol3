@@ -8,13 +8,10 @@
 #include "fsmc_controller.h"
 #include "fsmc_handler.h"
 
-fwversion version(0, 0, 1);
-
+FSMC3Config::fwversion version(0, 0, 1);
 FSMC3Config::Hardware hardware;
 
-FSMC3::Communicator communicator(&version);
-FSMC3::Controller controller(&hardware, &SPI);
-FSMC3::Handler handler(&controller, &communicator);
+FSMC3::Handler handler(&hardware, &version, &SPI);
 
 // Serial debugging variables/functions
 long timestamp = millis();
@@ -27,13 +24,10 @@ void report();
 void setup()
 {
 	Serial.begin(115200);
-	SPI.setMISO(hardware.configSystem.SPI_CIPO);
-	SPI.setMOSI(hardware.configSystem.SPI_COPI);
-	SPI.setSCLK(hardware.configSystem.SPI_SCLK);
-	controller.init();
+	handler.init();
 
 	// HACK: Remove this hardcoded enable for the only axis I have wired up
-	controller.axes[DEBUG_AXIS].setEnable(0x1);
+	handler.controller.axes[DEBUG_AXIS].setEnable(0x1);
 }
 
 void loop()
@@ -56,11 +50,11 @@ void report()
 	now = millis();
 	if (now - timestamp > interval)
 	{
-		Serial.print(controller.axes[DEBUG_AXIS].getAbsoluteAngle(), 5);
+		Serial.print(handler.controller.axes[DEBUG_AXIS].getAbsoluteAngle(), 5);
 		Serial.print("  |  ");
-		Serial.print(controller.axes[DEBUG_AXIS].getEncoderAngle(), 5);
+		Serial.print(handler.controller.axes[DEBUG_AXIS].getEncoderAngle(), 5);
 		Serial.print("  |  ");
-		Serial.println(controller.axes[DEBUG_AXIS].pidOutput, 5);
+		Serial.println(handler.controller.axes[DEBUG_AXIS].pidOutput, 5);
 		timestamp = millis();
 	}
 }

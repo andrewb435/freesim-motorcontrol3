@@ -17,21 +17,21 @@ namespace FSMC3
 		class EEPROMController
 		{
 		public:
-			fwversion dataVersion;
+			FSMC3Config::fwversion dataVersion;
 			ProtocolData isEnables = {0};
 			ProtocolData motorPs = {0};
 			ProtocolData motorIs = {0};
 			ProtocolData motorDs = {0};
 			ProtocolDataDoubles axisCenters = {0};
 		};
-		fwversion firmwareVersion;
+		FSMC3Config::fwversion firmwareVersion;
 		EEPROMController data;
 		void systemToEeprom();
 		void eepromToSystem();
 		bool checkDataVersion(EEPROMController tempData_in);
 
 	public:
-		EEPROMStorage(Controller *controller_in, fwversion *version_in);
+		EEPROMStorage(Controller *controller_in, FSMC3Config::fwversion *version_in);
 		void SaveToEEPROM();
 		void ReadFromEEPROM();
 		void WipeEEPROM();

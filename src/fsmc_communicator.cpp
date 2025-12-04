@@ -27,7 +27,7 @@ void FSMC3::Communicator::checkBuffer()
 	}
 }
 
-FSMC3::Communicator::Communicator(fwversion *version_in)
+FSMC3::Communicator::Communicator(FSMC3Config::fwversion *version_in)
 {
 	wipeBuffer(buffer);
 	wipeBuffer(output);
@@ -36,7 +36,7 @@ FSMC3::Communicator::Communicator(fwversion *version_in)
 	setVersion(version_in);
 }
 
-void FSMC3::Communicator::setVersion(fwversion *version_in)
+void FSMC3::Communicator::setVersion(FSMC3Config::fwversion *version_in)
 {
 	version = version_in;
 }
