@@ -97,6 +97,16 @@ void FSMC3::Controller::setD(ProtocolData *data_in)
 /*
 REPORTING FUNCTIONS
 */
+
+FSMC3::ProtocolData *FSMC3::Controller::getEnables()
+{
+	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
+	{
+		this->dataOutput.data[i] = this->axes[i].getEnabled();
+	}
+	return &this->dataOutput;
+}
+
 FSMC3::ProtocolData *FSMC3::Controller::getAbsoluteAngles16()
 {
 	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
@@ -105,6 +115,7 @@ FSMC3::ProtocolData *FSMC3::Controller::getAbsoluteAngles16()
 	}
 	return &this->dataOutput;
 }
+
 FSMC3::ProtocolData *FSMC3::Controller::getEncoderAngles16()
 {
 	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
@@ -123,7 +134,15 @@ FSMC3::ProtocolData *FSMC3::Controller::getMoveTargets16()
 	return &this->dataOutput;
 }
 
-FSMC3::ProtocolData *FSMC3::Controller::getAxisP()
+FSMC3::ProtocolDataDoubles *FSMC3::Controller::getCenters()
+{
+	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
+	{
+		this->axes[i].getCenter();
+	}
+}
+
+FSMC3::ProtocolData *FSMC3::Controller::getAxesP()
 {
 	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
 	{
@@ -132,7 +151,7 @@ FSMC3::ProtocolData *FSMC3::Controller::getAxisP()
 	return &this->dataOutput;
 }
 
-FSMC3::ProtocolData *FSMC3::Controller::getAxisI()
+FSMC3::ProtocolData *FSMC3::Controller::getAxesI()
 {
 	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
 	{
@@ -141,7 +160,7 @@ FSMC3::ProtocolData *FSMC3::Controller::getAxisI()
 	return &this->dataOutput;
 }
 
-FSMC3::ProtocolData *FSMC3::Controller::getAxisD()
+FSMC3::ProtocolData *FSMC3::Controller::getAxesD()
 {
 	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
 	{

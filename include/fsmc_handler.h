@@ -5,6 +5,7 @@
 #include "fsmc_controller.h"
 #include "fsmc_communicator.h"
 #include "fsmc_parser.h"
+#include "fsmc_eeprom.h"
 
 namespace FSMC3
 {
@@ -14,6 +15,7 @@ namespace FSMC3
 		FSMC3Config::Hardware *hardware;
 		FSMC3::Communicator communicator;
 		FSMC3::Parser parser;
+		FSMC3::EEPROMController eeprom;
 		void cmdReport();
 		// void cmdEEPROMSave();
 		// void cmdEEPROMLoad();

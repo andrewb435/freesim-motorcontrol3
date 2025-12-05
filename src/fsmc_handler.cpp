@@ -6,15 +6,15 @@ void FSMC3::Handler::cmdReport()
 	communicator.reportData(FSMC3::Outputs::OUTPUT_SPI_POSITION, controller.getAbsoluteAngles16());
 	communicator.reportData(FSMC3::Outputs::OUTPUT_ABZ_POSITION, controller.getEncoderAngles16());
 	communicator.reportData(FSMC3::Outputs::OUTPUT_TARGET, controller.getMoveTargets16());
-	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_P, controller.getAxisP());
-	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_I, controller.getAxisI());
-	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_D, controller.getAxisD());
+	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_P, controller.getAxesP());
+	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_I, controller.getAxesI());
+	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_D, controller.getAxesD());
 }
 
 FSMC3::Handler::Handler(FSMC3Config::Hardware *hardware_in, FSMC3Config::fwversion *version_in, SPIClass *SPI_in)
-	: communicator{
-		  version_in},
-	  controller{hardware_in, SPI_in}
+	: communicator{version_in},
+	  controller{hardware_in, SPI_in},
+	  eeprom{&controller, version_in}
 {
 	hardware = hardware_in;
 }
@@ -57,6 +57,15 @@ void FSMC3::Handler::processLoop()
 			break;
 		case FSMC3::Command::COMMAND_SET_D:
 			controller.setD(parser.getData());
+			break;
+		case FSMC3::Command::COMMAND_EEPROM_SAVE:
+			eeprom.systemToEeprom();
+			break;
+		case FSMC3::Command::COMMAND_EEPROM_LOAD:
+			eeprom.eepromToSystem();
+			break;
+		case FSMC3::Command::COMMAND_EEPROM_WIPE:
+			eeprom.eepromWipe();
 			break;
 		}
 		communicator.clearData();

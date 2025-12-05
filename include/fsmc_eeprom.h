@@ -2,39 +2,42 @@
 #define __FSMC_EEPROM_H__
 
 #include <cstdint>
+#include <EEPROM.h>
 #include "proto_fsmc3.h"
 #include "fsmc_controller.h"
 #include "fwversion.h"
 
 namespace FSMC3
 {
-	class EEPROMStorage
+	class EEPROMController
 	{
 		const static uint8_t EEPROM_START_OFFSET = 10;
 
 	private:
 		FSMC3::Controller *controller;
-		class EEPROMController
+		FSMC3Config::fwversion eepromFWVersion;
+		FSMC3Config::fwversion *compiledFWVersion;
+		bool versionMatched;
+		class EEPROMData
 		{
 		public:
 			FSMC3Config::fwversion dataVersion;
-			ProtocolData isEnables = {0};
+			ProtocolData axesEnables = {0};
+			ProtocolDataDoubles axesCenters = {0};
 			ProtocolData motorPs = {0};
 			ProtocolData motorIs = {0};
 			ProtocolData motorDs = {0};
-			ProtocolDataDoubles axisCenters = {0};
 		};
-		FSMC3Config::fwversion firmwareVersion;
-		EEPROMController data;
-		void systemToEeprom();
-		void eepromToSystem();
-		bool checkDataVersion(EEPROMController tempData_in);
+		EEPROMData data;
+		void checkDataVersion();
+		void writeDataToEEPROM();
+		void readEEPROMToData();
 
 	public:
-		EEPROMStorage(Controller *controller_in, FSMC3Config::fwversion *version_in);
-		void SaveToEEPROM();
-		void ReadFromEEPROM();
-		void WipeEEPROM();
+		EEPROMController(FSMC3::Controller *controller_in, FSMC3Config::fwversion *version_in);
+		void systemToEeprom();
+		int16_t eepromToSystem();
+		void eepromWipe();
 	};
 };
 

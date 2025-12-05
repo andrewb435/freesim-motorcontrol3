@@ -8,10 +8,11 @@ namespace FSMC3
 {
 	enum class Command : uint8_t
 	{
-		COMMAND_NONE = 0x7E, // "~"
+		/// @brief Command character [ "~" ] for doing nothing at all
+		COMMAND_NONE = 0x7E,
 		/// @brief Command character [ "N" ] for setting an axis to enabled or
 		/// disabled state.
-		COMMAND_ENABLE = 0x4E, // "N"
+		COMMAND_ENABLE = 0x4E,
 		/// @brief Command character [ "M" ] for requesting a move from the
 		/// controller. Values expected are a signed 16 bit integer describing the
 		/// position within the maximum range of the axis.
@@ -38,9 +39,12 @@ namespace FSMC3
 		/// Values will still be signed 16 bit integer but describing a double
 		/// within a range set in fsmc_pid.h
 		COMMAND_SET_D = 0x44,
-		COMMAND_EEPROM_SAVE = 0x58, // "X"
-		COMMAND_EEPROM_LOAD = 0x59, // "Y"
-		COMMAND_EEPROM_WIPE = 0x5A	// "Z"
+		/// @brief Command character [ "X" ] for saving system state to EEPROM
+		COMMAND_EEPROM_SAVE = 0x58,
+		/// @brief Command character [ "Y" ] for loading system state from EEPROM
+		COMMAND_EEPROM_LOAD = 0x59,
+		/// @brief Command character [ "X" ] for wiping onboard EEPROM
+		COMMAND_EEPROM_WIPE = 0x5A
 	};
 	enum class Outputs : uint8_t
 	{

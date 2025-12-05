@@ -107,6 +107,19 @@ double FSMC3::Axis::getEncoderAngle()
 	return position.getEncoderAngle();
 }
 
+int16_t FSMC3::Axis::getEnabled()
+{
+	if (isEnabled)
+		return AxisConst::IS_ENABLED;
+	else
+		return AxisConst::IS_DISABLED;
+}
+
+double FSMC3::Axis::getCenter()
+{
+	return position.getPositionCenter();
+}
+
 int16_t FSMC3::Axis::getAbsoluteAngle16()
 {
 	return position.getAbsoluteAngle16(rangeLow, rangeHigh);

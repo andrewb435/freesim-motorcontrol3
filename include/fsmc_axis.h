@@ -47,6 +47,8 @@ namespace FSMC3
 		double getAbsoluteAngle();
 		double getEncoderAngle();
 
+		int16_t getEnabled();
+		double getCenter();
 		int16_t getAbsoluteAngle16();
 		int16_t getEncoderAngle16();
 		int16_t getMoveTarget16();
@@ -58,6 +60,8 @@ namespace FSMC3
 	{
 		static const double NUDGE_RAD = (PI / 180);
 		static const double NUDGE_MAX = 10;
+		static const int16_t IS_ENABLED = 0x1;
+		static const int16_t IS_DISABLED = 0x0;
 	};
 }
 #endif // __FSMC_AXIS_H__
