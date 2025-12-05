@@ -14,6 +14,7 @@ namespace FSMC3
 	public:
 		FSMC3::Axis axes[ProtocolStructure::MAXIMUM_AXIS_COUNT];
 		FSMC3::ProtocolData dataOutput;
+		FSMC3::ProtocolDataDoubles dataDoubleOutput;
 
 	public:
 		/**

@@ -46,16 +46,14 @@ FSMC3::PID::PID(double *input, double *output, double *setpoint,
 
 	// Default limits
 	PID::setOutputLimits(
-		PIDConst::MOVETARGET_MIN,
-		PIDConst::MOVETARGET_MAX);
+		PIDConst::PID_OUTPUT_MIN,
+		PIDConst::PID_OUTPUT_MAX);
 	// Default interval (microseconds) 100 = 10KHz
 	intervalTime = 100;
 	// set incoming tunings
 	PID::setTunings();
 	// timestamp to start
 	lastTime = micros() - intervalTime;
-
-	// Low pass filter
 }
 
 bool FSMC3::PID::compute()

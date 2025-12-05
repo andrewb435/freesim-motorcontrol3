@@ -79,6 +79,16 @@ double FSMC3::Position::getPositionCenter()
 	return posCenter;
 }
 
+double FSMC3::Position::getRadsMin()
+{
+	return posMin;
+}
+
+double FSMC3::Position::getRadsMax()
+{
+	return posMax;
+}
+
 int16_t FSMC3::Position::getAbsoluteAngle16(int16_t rangeLow_in, int16_t rangeHigh_in)
 {
 	return FSMC3::Utils::mapDoubleToInt16(posCurrent, posMin, posMax, rangeLow_in, rangeHigh_in);

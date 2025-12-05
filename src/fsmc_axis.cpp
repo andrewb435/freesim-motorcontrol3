@@ -134,8 +134,8 @@ int16_t FSMC3::Axis::getMoveTarget16()
 {
 	return FSMC3::Utils::mapDoubleToInt16(
 		pidSetpoint,
-		FSMC3::PIDConst::MOVETARGET_MIN,
-		FSMC3::PIDConst::MOVETARGET_MAX,
+		position.getRadsMin(),
+		position.getRadsMax(),
 		rangeLow,
 		rangeHigh);
 }
@@ -146,8 +146,8 @@ int16_t FSMC3::Axis::getAxisP()
 		pidController.getKp(),
 		FSMC3::PIDConst::KPID_LO,
 		FSMC3::PIDConst::KP_HI,
-		rangeLow,
-		rangeHigh);
+		FSMC3::Utils::INT16_LO,
+		FSMC3::Utils::INT16_HI);
 }
 
 int16_t FSMC3::Axis::getAxisI()
@@ -156,8 +156,8 @@ int16_t FSMC3::Axis::getAxisI()
 		pidController.getKi(),
 		FSMC3::PIDConst::KPID_LO,
 		FSMC3::PIDConst::KI_HI,
-		rangeLow,
-		rangeHigh);
+		FSMC3::Utils::INT16_LO,
+		FSMC3::Utils::INT16_HI);
 }
 
 int16_t FSMC3::Axis::getAxisD()
@@ -166,6 +166,6 @@ int16_t FSMC3::Axis::getAxisD()
 		pidController.getKd(),
 		FSMC3::PIDConst::KPID_LO,
 		FSMC3::PIDConst::KD_HI,
-		rangeLow,
-		rangeHigh);
+		FSMC3::Utils::INT16_LO,
+		FSMC3::Utils::INT16_HI);
 }

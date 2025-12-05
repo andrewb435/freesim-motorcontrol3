@@ -87,8 +87,8 @@ namespace FSMC3
 		static const double KPID_LO = 0.0f;
 		static const double KI_HI = 1.0f;
 		static const double KD_HI = 1.0f;
-		static const double MOVETARGET_MIN = -1.0f;
-		static const double MOVETARGET_MAX = 1.0f;
+		static const double PID_OUTPUT_MIN = -1.0f;
+		static const double PID_OUTPUT_MAX = 1.0f;
 	};
 	namespace PIDTuneDefault
 	{

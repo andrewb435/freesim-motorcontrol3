@@ -34,6 +34,8 @@ namespace FSMC3
 		double getAbsoluteAngle();
 		double getEncoderAngle();
 		double getPositionCenter();
+		double getRadsMin();
+		double getRadsMax();
 		int16_t getAbsoluteAngle16(int16_t rangeLow_in, int16_t rangeHigh_in);
 		int16_t getEncoderAngle16(int16_t rangeLow_in, int16_t rangeHigh_in);
 	};

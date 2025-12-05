@@ -138,8 +138,9 @@ FSMC3::ProtocolDataDoubles *FSMC3::Controller::getCenters()
 {
 	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
 	{
-		this->axes[i].getCenter();
+		this->dataDoubleOutput.data[i] = this->axes[i].getCenter();
 	}
+	return &this->dataDoubleOutput;
 }
 
 FSMC3::ProtocolData *FSMC3::Controller::getAxesP()
