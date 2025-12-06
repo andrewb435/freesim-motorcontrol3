@@ -62,6 +62,14 @@ void FSMC3::Controller::setEnables(ProtocolData *data_in)
 	}
 }
 
+void FSMC3::Controller::setMoveTargets(ProtocolData *data_in)
+{
+	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
+	{
+		this->axes[i].setMoveTarget(data_in->data[i]);
+	}
+}
+
 void FSMC3::Controller::nudgeCenters(ProtocolData *data_in)
 {
 	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
@@ -168,14 +176,6 @@ FSMC3::ProtocolData *FSMC3::Controller::getAxesD()
 		this->dataOutput.data[i] = this->axes[i].getAxisD();
 	}
 	return &this->dataOutput;
-}
-
-void FSMC3::Controller::setMoveTargets(ProtocolData *data_in)
-{
-	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
-	{
-		this->axes[i].setMoveTarget(data_in->data[i]);
-	}
 }
 
 /*

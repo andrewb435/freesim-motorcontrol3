@@ -67,7 +67,12 @@ void FSMC3::Axis::setEnable(int16_t enable_in)
 
 void FSMC3::Axis::setMoveTarget(int16_t target_in)
 {
-	pidSetpoint = FSMC3::Utils::mapInt16ToDouble(target_in, rangeLow, rangeHigh, -1.0, 1.0);
+	pidSetpoint = FSMC3::Utils::mapInt16ToDouble(
+		target_in,
+		rangeLow,
+		rangeHigh,
+		position.getRadsMin(),
+		position.getRadsMax());
 }
 
 void FSMC3::Axis::setP(int16_t valP_in)

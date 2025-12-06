@@ -54,6 +54,7 @@ namespace FSMC3
 		OUTPUT_GET_P = 0x50,		// "P"
 		OUTPUT_GET_I = 0x49,		// "I"
 		OUTPUT_GET_D = 0x44,		// "D"
+		OUTPUT_GET_ENABLE = 0x4E,	// "N"
 	};
 	namespace ProtocolStructure
 	{
