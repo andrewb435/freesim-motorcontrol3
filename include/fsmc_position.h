@@ -17,11 +17,12 @@ namespace FSMC3
 		double posMax;
 		double posCenter;
 		double posCurrent;
+		double range;
 		FSMC3Config::Axis *axisData;
 		SPIClass *spi;
 		MagneticSensorMT6835 sensor;
 		STM32HWEncoder encoder;
-		void hwEncoderWorkaround();
+		void calcRangeEnds();
 
 	public:
 		Position(FSMC3Config::Axis *axisData_in, SPIClass *SPI_in, SPISettings *spiSettings_in);
@@ -30,14 +31,14 @@ namespace FSMC3
 		/// @brief Takes radians of total range sets minimum and maximum
 		/// @param range_in double radians of total travel
 		void setRange(double range_in);
+		void setCenterToCurrent();
+		void setCenter(double center_in);
 		void nudgeCenter(double nudge_in);
 		double getAbsoluteAngle();
 		double getEncoderAngle();
 		double getPositionCenter();
 		double getRadsMin();
 		double getRadsMax();
-		int16_t getAbsoluteAngle16(int16_t rangeLow_in, int16_t rangeHigh_in);
-		int16_t getEncoderAngle16(int16_t rangeLow_in, int16_t rangeHigh_in);
 	};
 }
 #endif // __FSMC_ENCODER_H__

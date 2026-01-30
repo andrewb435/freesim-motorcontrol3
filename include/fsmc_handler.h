@@ -5,25 +5,23 @@
 #include "fsmc_controller.h"
 #include "fsmc_communicator.h"
 #include "fsmc_parser.h"
-#include "fsmc_eeprom.h"
+#include "fsmc_storage.h"
 
 namespace FSMC3
 {
 	class Handler
 	{
 	private:
+		FSMC3Config::fwversion *version;
 		FSMC3Config::Hardware *hardware;
+		FSMC3::Controller controller;
 		FSMC3::Communicator communicator;
 		FSMC3::Parser parser;
-		FSMC3::EEPROMController eeprom;
+		FSMC3::StorageController storage;
 		void cmdReport();
-		// void cmdEEPROMSave();
-		// void cmdEEPROMLoad();
-		// void cmdEEPROMWipe();
+		void cmdStatic();
+
 	public:
-		// HACK: Put Controller back in private after debugging hack in main
-		FSMC3::Controller controller;
-		// Handler(FSMC3::Controller *controller_in, FSMC3::Communicator *communicator_in);
 		Handler(FSMC3Config::Hardware *hardware_in, FSMC3Config::fwversion *version_in, SPIClass *SPI_in);
 		void init();
 		void processLoop();

@@ -9,56 +9,66 @@ namespace FSMC3Config
 		  hwtimer5{TIM5},
 		  spi_settings{1000000, MT6835_BITORDER, SPI_MODE3},
 		  configSystem{
-			  .eStopPin = PB1,
-			  .SPI_COPI = PB15,
-			  .SPI_CIPO = PB14,
-			  .SPI_SCLK = PB10,
+			  .debugPosition = false,
+			  .debugPID = false,
+			  .eStopPin = PC13,
+			  .SPI_COPI = PA7,
+			  .SPI_CIPO = PA6,
+			  .SPI_SCLK = PA5,
 			  .pwmResolution = 32767,
 			  .pwmFrequency = 20000,
 			  .commandBitDepth = 12,
 			  .spiSettings = &spi_settings,
 			  .pidFrequency = 10000, // 10kHz
-			  .pidLPFCutoff = 100},	 // 100Hz
+			  .pidLPFCutoff = 100,
+			  .spiFlashCS = PA4}, // 100Hz // W25Q64JV_IQ 8MB
 		  configDrivers{
 			  FSMC3Config::Driver{
-				  .enablePin = PB13_ALT0,
-				  .pwmChAPin = PA_8, // TIM1 CH1
-				  .pwmChBPin = PA_9, // TIM1 CH2
-				  .hwtimer = &hwtimer1},
+				  .enablePin = PB8,
+				  .pwmChAPin = PB6, // TIM4 CH1 AF02
+				  .pwmChBPin = PB7, // TIM4 CH2 AF02
+				  .hwtimer = &hwtimer4},
 			  FSMC3Config::Driver{
-				  .enablePin = PB4_ALT0,
-				  .pwmChAPin = PA_5, // TIM2 CH1
-				  .pwmChBPin = PB_3, // TIM2 CH2
+				  .enablePin = PB15, // PB15 and PB_15 resolves to a different pin - appears to be a bug in stm32hal,
+									 // 30U (PB15) is the correct pin for the blackpill variant
+				  .pwmChAPin = PA15, // TIM2 CH1 AF01
+				  .pwmChBPin = PB3,	 // TIM2 CH2 AF01
 				  .hwtimer = &hwtimer2},
 			  FSMC3Config::Driver{
-				  .enablePin = PA4_ALT0,
-				  .pwmChAPin = PA_2, // TIM2 CH3
-				  .pwmChBPin = PA_3, // TIM2 CH4
+				  .enablePin = PC15,
+				  .pwmChAPin = PA2, // TIM2 CH3 AF01
+				  .pwmChBPin = PA3, // TIM2 CH4 AF01
 				  .hwtimer = &hwtimer2},
 		  },
 		  configAxes{
 			  FSMC3Config::Axis{
+				  .invertDirection = false,
+				  .invertEncoderDir = true,
 				  .encoderPPR = 16384,
-				  .encoderPinA = PA_6,		// TIM3 CH1
-				  .encoderPinB = PA_7_ALT1, // TIM3 CH2 ALT1
-				  .encoderTimer = &hwtimer3,
-				  .sensorPinCS = PB0, // MT6835 CS pin
+				  .encoderPinA = PA8, // TIM1 CH1 AF01
+				  .encoderPinB = PA9, // TIM1 CH2 AF01
+				  .encoderTimer = &hwtimer1,
+				  .sensorPinCS = PB9, // MT6835 CS pin
 				  .rangeDegrees = 80, // Total (min to max) degree range of the actuator
 				  .driver = &configDrivers[FSMC3Config::AxisByName::AXISA]},
 			  FSMC3Config::Axis{
+				  .invertDirection = false,
+				  .invertEncoderDir = false,
 				  .encoderPPR = 16384,
-				  .encoderPinA = PB_6, // TIM4 CH1
-				  .encoderPinB = PB_7, // TIM4 CH2
-				  .encoderTimer = &hwtimer4,
-				  .sensorPinCS = PB_5, // MT6835 CS pin
+				  .encoderPinA = PB4, // TIM3 CH1 AF02
+				  .encoderPinB = PB5, // TIM3 CH2 AF02
+				  .encoderTimer = &hwtimer3,
+				  .sensorPinCS = PB14, // MT6835 CS pin
 				  .rangeDegrees = 80,  // Total (min to max) degree range of the actuator
 				  .driver = &configDrivers[FSMC3Config::AxisByName::AXISB]},
 			  FSMC3Config::Axis{
+				  .invertDirection = false,
+				  .invertEncoderDir = false,
 				  .encoderPPR = 16384,
-				  .encoderPinA = PA_0_ALT1, // TIM5 CH1 ALT1
-				  .encoderPinB = PA_1_ALT1, // TIM5 CH2 ALT1
+				  .encoderPinA = PA0_ALT1, // TIM5 CH1 AF02
+				  .encoderPinB = PA1_ALT1, // TIM5 CH2 AF02
 				  .encoderTimer = &hwtimer5,
-				  .sensorPinCS = PC15, // MT6835 CS pin
+				  .sensorPinCS = PC14, // MT6835 CS pin
 				  .rangeDegrees = 80,  // Total (min to max) degree range of the actuator
 				  .driver = &configDrivers[FSMC3Config::AxisByName::AXISC]}}
 	{

@@ -17,9 +17,15 @@ namespace FSMC3
 		/// controller. Values expected are a signed 16 bit integer describing the
 		/// position within the maximum range of the axis.
 		COMMAND_MOVE = 0x4D,
-		/// @brief Command character [ "R" ] for requesting a full update report
+		/// @brief Command character [ "R" ] for requesting a real-time update report
 		/// from the controller
 		COMMAND_REPORT = 0x52,
+		/// @brief Command character [ "S" ] for requesting a static update report
+		/// from the controller
+		COMMAND_STATIC = 0x53,
+		/// @brief Command character [ "c" ] for setting the centerpoint at current position:
+		/// Will only set if value is > 0
+		COMMAND_SET_CENTER = 0x63,
 		/// @brief Command character [ "C" ] for nudging the centerpoint:
 		/// Values are a signed 16 bit integer instructing a number of degrees
 		/// (positive or negative) to adjust the centerpoint by. This is clamped
@@ -40,11 +46,11 @@ namespace FSMC3
 		/// within a range set in fsmc_pid.h
 		COMMAND_SET_D = 0x44,
 		/// @brief Command character [ "X" ] for saving system state to EEPROM
-		COMMAND_EEPROM_SAVE = 0x58,
+		COMMAND_STORAGE_SAVE = 0x58,
 		/// @brief Command character [ "Y" ] for loading system state from EEPROM
-		COMMAND_EEPROM_LOAD = 0x59,
-		/// @brief Command character [ "X" ] for wiping onboard EEPROM
-		COMMAND_EEPROM_WIPE = 0x5A
+		COMMAND_STORAGE_LOAD = 0x59,
+		/// @brief Command character [ "Z" ] for wiping onboard EEPROM
+		COMMAND_STORAGE_WIPE = 0x5A
 	};
 	enum class Outputs : uint8_t
 	{
@@ -54,7 +60,7 @@ namespace FSMC3
 		OUTPUT_GET_P = 0x50,		// "P"
 		OUTPUT_GET_I = 0x49,		// "I"
 		OUTPUT_GET_D = 0x44,		// "D"
-		OUTPUT_GET_ENABLE = 0x4E,	// "N"
+		OUTPUT_GET_EN = 0x4E,		// "N"
 	};
 	namespace ProtocolStructure
 	{

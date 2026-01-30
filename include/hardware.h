@@ -15,6 +15,10 @@ namespace FSMC3Config
 	};
 	struct SystemHW
 	{
+		/// @brief Generate Position-related debug spam. THIS WILL BREAK NORMAL COMMUNICATION!
+		bool debugPosition;
+		/// @brief Generate PID-related debug spam. THIS WILL BREAK NORMAL COMMUNICATION!
+		bool debugPID;
 		uint16_t eStopPin;
 		uint16_t SPI_COPI;
 		uint16_t SPI_CIPO;
@@ -25,6 +29,7 @@ namespace FSMC3Config
 		SPISettings *spiSettings;
 		int16_t pidFrequency;
 		int16_t pidLPFCutoff;
+		int16_t spiFlashCS;
 	};
 	struct Driver
 	{
@@ -35,6 +40,10 @@ namespace FSMC3Config
 	};
 	struct Axis
 	{
+		/// @brief If the actuator physically goes down when commanded up, invert this
+		bool invertDirection;
+		/// @brief If the ABZ and SPI positions diverge, invert this
+		bool invertEncoderDir;
 		uint16_t encoderPPR;
 		int16_t encoderPinA;
 		int16_t encoderPinB;

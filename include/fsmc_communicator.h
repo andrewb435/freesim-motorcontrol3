@@ -19,8 +19,7 @@ namespace FSMC3
 		void checkBuffer();
 
 	public:
-		Communicator(FSMC3Config::fwversion *version_in);
-		void setVersion(FSMC3Config::fwversion *version_in);
+		Communicator();
 		void processLoop();
 		bool checkForData();
 		char *getBuffer();

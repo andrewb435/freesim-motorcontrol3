@@ -1,9 +1,9 @@
 #include "fsmc_position.h"
 
-void FSMC3::Position::hwEncoderWorkaround()
+void FSMC3::Position::calcRangeEnds()
 {
-	encoder._pinA = digitalPinToPinName(axisData->encoderPinA);
-	encoder._pinB = digitalPinToPinName(axisData->encoderPinB);
+	posMax = posCenter + (range / 2);
+	posMin = posCenter - (range / 2);
 }
 
 FSMC3::Position::Position(FSMC3Config::Axis *axisData_in,
@@ -12,16 +12,16 @@ FSMC3::Position::Position(FSMC3Config::Axis *axisData_in,
 	: encoder{
 		  STM32HWEncoder{
 			  axisData_in->encoderPPR,
-			  axisData_in->encoderPinA,
-			  axisData_in->encoderPinB}},
+			  (axisData_in->invertEncoderDir ? axisData_in->encoderPinB : axisData_in->encoderPinA),
+			  (axisData_in->invertEncoderDir ? axisData_in->encoderPinA : axisData_in->encoderPinB)}},
 	  sensor{MagneticSensorMT6835{axisData_in->sensorPinCS, *spiSettings_in}}
 {
 	axisData = axisData_in;
-	posInvert = true;
+	posInvert = axisData_in->invertEncoderDir;
 	posOffset = 0.0f;
 	posMin = 0.0f;
 	posMax = 0.0f;
-	posCenter = 1.68f;
+	posCenter = 0.0f;
 	posCurrent = 0.0f;
 	spi = SPI_in;
 }
@@ -30,37 +30,43 @@ void FSMC3::Position::init()
 {
 	sensor.init();
 	encoder.init();
-	sensor.update();
-	encoder.update();
-	posOffset = encoder.getAngle() + sensor.getAngle();
-	hwEncoderWorkaround();
+	setCenterToCurrent();
 }
 
 double FSMC3::Position::processLoop()
 {
 	encoder.update();
 	posCurrent = encoder.getAngle();
-	if (posInvert)
-	{
-		posCurrent = abs(encoder.getAngle() - posOffset);
-	}
-	else
-	{
-		posCurrent = encoder.getAngle() + posOffset;
-	}
-	// TODO: Sanity check against SPI absolute angle every once in a while
+	posCurrent = abs(encoder.getAngle() + posOffset);
 	return this->posCurrent;
 }
 
 void FSMC3::Position::setRange(double range_in)
 {
-	posMax = posCenter + (range_in / 2);
-	posMin = posCenter - (range_in / 2);
+	range = range_in;
+	calcRangeEnds();
+}
+
+void FSMC3::Position::setCenterToCurrent()
+{
+	sensor.update();
+	encoder.update();
+	posCenter = sensor.getAngle();
+	posOffset = encoder.getAngle() + sensor.getAngle();
+	posOffset = posOffset * (posInvert ? 1 : -1);
+	calcRangeEnds();
+}
+
+void FSMC3::Position::setCenter(double center_in)
+{
+	posCenter = center_in;
+	calcRangeEnds();
 }
 
 void FSMC3::Position::nudgeCenter(double nudge_in)
 {
 	posCenter = posCenter + nudge_in;
+	calcRangeEnds();
 }
 
 double FSMC3::Position::getAbsoluteAngle()
@@ -87,14 +93,4 @@ double FSMC3::Position::getRadsMin()
 double FSMC3::Position::getRadsMax()
 {
 	return posMax;
-}
-
-int16_t FSMC3::Position::getAbsoluteAngle16(int16_t rangeLow_in, int16_t rangeHigh_in)
-{
-	return FSMC3::Utils::mapDoubleToInt16(posCurrent, posMin, posMax, rangeLow_in, rangeHigh_in);
-}
-
-int16_t FSMC3::Position::getEncoderAngle16(int16_t rangeLow_in, int16_t rangeHigh_in)
-{
-	return FSMC3::Utils::mapDoubleToInt16(posCurrent, posMin, posMax, rangeLow_in, rangeHigh_in);
 }

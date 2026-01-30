@@ -11,16 +11,21 @@ namespace FSMC3
 	class Axis
 	{
 	private:
+		bool debugPosition;
+		bool debugPID;
 		bool isEnabled;
+		bool invertDirection;
 		uint8_t commandBitDepth;
 		int16_t rangeLow;
 		int16_t rangeCenter;
 		int16_t rangeHigh;
+		double rangeFloat;
 		double pidSetpoint;
 		double pidInput;
 		FSMC3::PID pidController;
 		FSMC3::PWMDriver driver;
 		FSMC3::Position position;
+		void setRangeFloat();
 
 	public:
 		double pidOutput;
@@ -41,6 +46,9 @@ namespace FSMC3
 		void setP(int16_t valP_in);
 		void setI(int16_t valI_in);
 		void setD(int16_t valD_in);
+		/// @brief Set centerpoint to current encoder position
+		/// @param set_in int16_t > 0 = set
+		void setCenterToCurrent(int16_t set_in);
 		/// @brief Nudge centerpoint +- 1 degree
 		/// @param nudge_in int16_t: Positive nudges +1 degree, negative nudges -1 degree
 		void nudgeCenter(int16_t nudge_in);

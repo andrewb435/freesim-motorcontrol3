@@ -7,9 +7,9 @@ namespace FSMC3Config
 {
 	struct fwversion
 	{
-		uint8_t major = 0;
-		uint8_t minor = 0;
-		uint8_t patch = 0;
+		uint8_t major;
+		uint8_t minor;
+		uint8_t patch;
 		fwversion() {}
 		fwversion(uint8_t major_in, uint8_t minor_in, uint8_t patch_in)
 		{

@@ -11,7 +11,7 @@ namespace FSMC3
 {
 	class Controller
 	{
-	public:
+	private:
 		FSMC3::Axis axes[ProtocolStructure::MAXIMUM_AXIS_COUNT];
 		FSMC3::ProtocolData dataOutput;
 		FSMC3::ProtocolDataDoubles dataDoubleOutput;
@@ -38,6 +38,9 @@ namespace FSMC3
 		/// e.g hardwareConfig.configSystem.commandBitDepth = 12 means the range is 0-4095
 		/// @param data_in ProtocolData containing [axis count]{int16_t} move target within the range
 		void setMoveTargets(ProtocolData *data_in);
+		/// @brief Set centerpoint to current position for any axis that has data > 0 in the frame
+		/// @param data_in ProtocolData containing [axis count]{int16_t}, >0 sets axis center to current absolute encoder position
+		void setCenterToCurrent(ProtocolData *data_in);
 		/// @brief Nudge centerpoints +- 1 degree
 		/// @param data_in ProtocolData containing [axis count]{int16_t} positive nudges +1 degree, negative nudges -1 degree
 		void nudgeCenters(ProtocolData *data_in);
@@ -64,9 +67,9 @@ namespace FSMC3
 		FSMC3::ProtocolData *getAxesD();
 
 		/*
-		EEPROM FUNCTIONS
+		STORAGE FUNCTIONS
 		*/
-		void eepromSetCenters(ProtocolDataDoubles *data_in);
+		void setCentersFromStorage(ProtocolDataDoubles *data_in);
 	};
 };
 #endif
