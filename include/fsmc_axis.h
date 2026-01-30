@@ -26,6 +26,7 @@ namespace FSMC3
 		FSMC3::PWMDriver driver;
 		FSMC3::Position position;
 		void setRangeFloat();
+		void debugReport();
 
 	public:
 		double pidOutput;

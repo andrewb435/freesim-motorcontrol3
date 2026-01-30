@@ -5,6 +5,33 @@ void FSMC3::Axis::setRangeFloat()
 	position.setRange(rangeFloat);
 }
 
+void FSMC3::Axis::debugReport()
+{
+	if (debugPosition || debugPID)
+	{
+		Serial.print("Axis ");
+		Serial.print((uintptr_t)this, HEX);
+		Serial.print(": ");
+		if (debugPosition)
+		{
+			Serial.print("abs pos: ");
+			Serial.print(this->position.getAbsoluteAngle(), 5);
+			Serial.print(", enc pos: ");
+			Serial.print(this->position.getEncoderAngle(), 5);
+		}
+		if (debugPosition && debugPID)
+		{
+			Serial.print(", ");
+		}
+		if (debugPID)
+		{
+			Serial.print("out: ");
+			Serial.print(this->pidOutput, 5);
+		}
+		Serial.println();
+	}
+}
+
 FSMC3::Axis::Axis(FSMC3Config::SystemHW *system_in,
 				  FSMC3Config::Axis *axis_in,
 				  SPIClass *SPI_in)
@@ -47,29 +74,7 @@ void FSMC3::Axis::processLoop()
 		pidInput = position.processLoop();
 		if (pidController.compute())
 			driver.drive(pidOutput);
-	}
-	if (isEnabled && (debugPosition || debugPID))
-	{
-		Serial.print("Axis ");
-		Serial.print((uintptr_t)this, HEX);
-		Serial.print(": ");
-		if (debugPosition)
-		{
-			Serial.print("abs pos: ");
-			Serial.print(this->position.getAbsoluteAngle(), 5);
-			Serial.print(", enc pos: ");
-			Serial.print(this->position.getEncoderAngle(), 5);
-		}
-		if (debugPosition && debugPID)
-		{
-			Serial.print(", ");
-		}
-		if (debugPID)
-		{
-			Serial.print("out: ");
-			Serial.print(this->pidOutput, 5);
-		}
-		Serial.println();
+		debugReport();
 	}
 }
 
