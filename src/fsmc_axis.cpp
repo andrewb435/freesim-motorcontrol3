@@ -81,6 +81,11 @@ void FSMC3::Axis::eepromSetCenter(double data_in)
 	position.setCenter(data_in);
 }
 
+void FSMC3::Axis::eepromResetTargetToCenter()
+{
+	pidSetpoint = this->getCenter();
+}
+
 void FSMC3::Axis::setRange(int16_t range_in)
 {
 	double rangeFloat = range_in * (PI / 180.0);

@@ -194,5 +194,6 @@ void FSMC3::Controller::setCentersFromStorage(ProtocolDataDoubles *data_in)
 	for (uint8_t i = 0; i < ProtocolStructure::MAXIMUM_AXIS_COUNT; i++)
 	{
 		this->axes[i].eepromSetCenter(data_in->data[i]);
+		this->axes[i].eepromResetTargetToCenter();
 	}
 }

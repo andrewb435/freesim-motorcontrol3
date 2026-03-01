@@ -34,6 +34,7 @@ namespace FSMC3
 		void init();
 		void processLoop();
 		void eepromSetCenter(double data_in);
+		void eepromResetTargetToCenter();
 		/// @brief Takes total range in degrees (e.g. center = 0, max +40, min -40 = 80 degrees)
 		/// @param range_in
 		void setRange(int16_t range_in);
