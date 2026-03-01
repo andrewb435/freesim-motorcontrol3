@@ -1,5 +1,5 @@
-#ifndef __FSMC_EEPROM_H__
-#define __FSMC_EEPROM_H__
+#ifndef __FSMC_STORAGE_H__
+#define __FSMC_STORAGE_H__
 
 #include <cstdint>
 #include "proto_fsmc3.h"
@@ -50,4 +50,4 @@ namespace FSMC3
 	};
 };
 
-#endif // __FSMC_EEPROM_H__
+#endif // __FSMC_STORAGE_H__
