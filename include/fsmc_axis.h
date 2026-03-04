@@ -14,7 +14,8 @@ namespace FSMC3
 		bool debugPosition;
 		bool debugPID;
 		bool isEnabled;
-		bool invertDirection;
+		bool invertFeedbackDirection;
+		bool invertMotorDirection;
 		uint8_t commandBitDepth;
 		int16_t rangeLow;
 		int16_t rangeCenter;

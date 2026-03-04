@@ -41,7 +41,8 @@ FSMC3::Axis::Axis(FSMC3Config::SystemHW *system_in,
 		  FSMC3::PIDTuneDefault::DEFAULT_D},
 	  driver{axis_in->driver, system_in}, position{axis_in, SPI_in, system_in->spiSettings}
 {
-	invertDirection = axis_in->invertDirection;
+	invertFeedbackDirection = axis_in->invertFeedbackDirection;
+	invertMotorDirection = axis_in->invertMotorDirection;
 	pidSetpoint = 0.0;
 	pidInput = 0.0;
 	pidOutput = 0.0;
@@ -70,7 +71,7 @@ void FSMC3::Axis::processLoop()
 	{
 		pidInput = position.processLoop();
 		if (pidController.compute())
-			driver.drive(pidOutput);
+			driver.drive(pidOutput, invertMotorDirection);
 		if (debugPosition || debugPID)
 			debugReport();
 	}
@@ -109,7 +110,7 @@ void FSMC3::Axis::setEnable(int16_t enable_in)
 void FSMC3::Axis::setMoveTarget(int16_t target_in)
 {
 	// TODO: Hot path, see about optimizing this
-	if (!invertDirection)
+	if (!invertFeedbackDirection)
 	{
 		pidSetpoint = FSMC3::Utils::mapInt16ToDouble(
 			target_in,
@@ -189,7 +190,7 @@ double FSMC3::Axis::getCenter()
 
 int16_t FSMC3::Axis::getAbsoluteAngle16()
 {
-	if (!invertDirection)
+	if (!invertFeedbackDirection)
 	{
 		return FSMC3::Utils::mapDoubleToInt16(
 			position.getAbsoluteAngle(),
@@ -211,7 +212,7 @@ int16_t FSMC3::Axis::getAbsoluteAngle16()
 
 int16_t FSMC3::Axis::getEncoderAngle16()
 {
-	if (!invertDirection)
+	if (!invertFeedbackDirection)
 	{
 		return FSMC3::Utils::mapDoubleToInt16(
 			position.getEncoderAngle(),

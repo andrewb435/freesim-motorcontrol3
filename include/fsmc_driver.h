@@ -30,7 +30,7 @@ namespace FSMC3
 		/// @brief Drive the h-bridge at the target value
 		/// @param target -1.0 to 1.0
 		void init();
-		void drive(float target);
+		void drive(float target, bool inverted);
 		void setEnable(bool enable_in);
 		uint32_t getTarget();
 	};

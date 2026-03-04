@@ -35,11 +35,19 @@ void FSMC3::PWMDriver::init()
 	setEnable(isEnabled);
 }
 
-void FSMC3::PWMDriver::drive(float target)
+void FSMC3::PWMDriver::drive(float target, bool inverted)
 {
 	if (isEnabled)
 	{
-		int16_t pwm_target = mapFloatToTick(target, -1.0, 1.0, pwmResolution * -1, pwmResolution);
+		int16_t pwm_target = 0;
+		if (inverted)
+		{
+			pwm_target = mapFloatToTick(target, -1.0, 1.0, pwmResolution, pwmResolution * -1);
+		}
+		else
+		{
+			pwm_target = mapFloatToTick(target, -1.0, 1.0, pwmResolution * -1, pwmResolution);
+		}
 		if (pwm_target < 0)
 		{
 			hwtimer->setCaptureCompare(channelA, 0);

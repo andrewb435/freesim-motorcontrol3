@@ -42,34 +42,37 @@ namespace FSMC3Config
 		  },
 		  configAxes{
 			  FSMC3Config::Axis{
-				  .invertDirection = false,
-				  .invertEncoderDir = true,
+				  .flipABZSPIDir = true,
+				  .invertFeedbackDirection = true,
+				  .invertMotorDirection = true,
+				  .rangeDegrees = 80,
 				  .encoderPPR = 16384,
 				  .encoderPinA = PA8, // TIM1 CH1 AF01
 				  .encoderPinB = PA9, // TIM1 CH2 AF01
 				  .encoderTimer = &hwtimer1,
 				  .sensorPinCS = PB9, // MT6835 CS pin
-				  .rangeDegrees = 80, // Total (min to max) degree range of the actuator
 				  .driver = &configDrivers[FSMC3Config::AxisByName::AXISA]},
 			  FSMC3Config::Axis{
-				  .invertDirection = false,
-				  .invertEncoderDir = false,
+				  .flipABZSPIDir = false,
+				  .invertFeedbackDirection = false,
+				  .invertMotorDirection = true,
+				  .rangeDegrees = 80,
 				  .encoderPPR = 16384,
 				  .encoderPinA = PB4, // TIM3 CH1 AF02
 				  .encoderPinB = PB5, // TIM3 CH2 AF02
 				  .encoderTimer = &hwtimer3,
 				  .sensorPinCS = PB14, // MT6835 CS pin
-				  .rangeDegrees = 80,  // Total (min to max) degree range of the actuator
 				  .driver = &configDrivers[FSMC3Config::AxisByName::AXISB]},
 			  FSMC3Config::Axis{
-				  .invertDirection = false,
-				  .invertEncoderDir = false,
+				  .flipABZSPIDir = false,
+				  .invertFeedbackDirection = false,
+				  .invertMotorDirection = true,
+				  .rangeDegrees = 80,
 				  .encoderPPR = 16384,
 				  .encoderPinA = PA0_ALT1, // TIM5 CH1 AF02
 				  .encoderPinB = PA1_ALT1, // TIM5 CH2 AF02
 				  .encoderTimer = &hwtimer5,
 				  .sensorPinCS = PC14, // MT6835 CS pin
-				  .rangeDegrees = 80,  // Total (min to max) degree range of the actuator
 				  .driver = &configDrivers[FSMC3Config::AxisByName::AXISC]}}
 	{
 		// Empty constructor body, configuration is all inline

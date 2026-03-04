@@ -40,16 +40,20 @@ namespace FSMC3Config
 	};
 	struct Axis
 	{
-		/// @brief If the actuator physically goes down when commanded up, invert this
-		bool invertDirection;
 		/// @brief If the ABZ and SPI positions diverge, invert this
-		bool invertEncoderDir;
+		bool flipABZSPIDir;
+		/// @brief If the feedback (ABZ + SPI) are matched but backwards (down = up), invert this
+		bool invertFeedbackDirection;
+		/// @brief If the motor is backwards from feedback, invert this
+		bool invertMotorDirection;
+		/// @brief Total range of movement in degrees
+		uint16_t rangeDegrees;
+		/// @brief Encoder PPR 1-indexed (aka 1-16384 NOT 0-16383 for a 14 bit encoder)
 		uint16_t encoderPPR;
 		int16_t encoderPinA;
 		int16_t encoderPinB;
 		HardwareTimer *encoderTimer;
 		int16_t sensorPinCS;
-		uint16_t rangeDegrees;
 		FSMC3Config::Driver *driver;
 	};
 }

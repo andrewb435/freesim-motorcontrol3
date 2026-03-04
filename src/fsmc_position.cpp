@@ -12,12 +12,12 @@ FSMC3::Position::Position(FSMC3Config::Axis *axisData_in,
 	: encoder{
 		  STM32HWEncoder{
 			  axisData_in->encoderPPR,
-			  (axisData_in->invertEncoderDir ? axisData_in->encoderPinB : axisData_in->encoderPinA),
-			  (axisData_in->invertEncoderDir ? axisData_in->encoderPinA : axisData_in->encoderPinB)}},
+			  (axisData_in->flipABZSPIDir ? axisData_in->encoderPinB : axisData_in->encoderPinA),
+			  (axisData_in->flipABZSPIDir ? axisData_in->encoderPinA : axisData_in->encoderPinB)}},
 	  sensor{MagneticSensorMT6835{axisData_in->sensorPinCS, *spiSettings_in}}
 {
 	axisData = axisData_in;
-	posInvert = axisData_in->invertEncoderDir;
+	posInvert = axisData_in->flipABZSPIDir;
 	posOffset = 0.0f;
 	posMin = 0.0f;
 	posMax = 0.0f;
