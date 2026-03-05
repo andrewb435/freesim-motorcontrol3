@@ -18,6 +18,16 @@ void FSMC3::Handler::cmdStatic()
 	communicator.reportData(FSMC3::Outputs::OUTPUT_GET_EN, controller.getEnables());
 }
 
+void FSMC3::Handler::errorState()
+{
+	while (1)
+	{
+		Serial.println("STORAGE ERROR DO NOT PROCEED");
+		digitalWrite(hardware->configSystem.errorLEDpin, !digitalRead(hardware->configSystem.errorLEDpin));
+		delay(500);
+	}
+}
+
 FSMC3::Handler::Handler(FSMC3Config::Hardware *hardware_in, FSMC3Config::fwversion *version_in, SPIClass *SPI_in)
 	: controller{hardware_in, SPI_in},
 	  storage{&controller, version_in, hardware_in->configSystem.spiFlashCS}
@@ -31,7 +41,10 @@ void FSMC3::Handler::init()
 	SPI.setMOSI(hardware->configSystem.SPI_COPI);
 	SPI.setSCLK(hardware->configSystem.SPI_SCLK);
 	controller.init();
-	storage.init();
+	if (!storage.init())
+	{
+		errorState();
+	};
 }
 
 void FSMC3::Handler::processLoop()

@@ -20,6 +20,7 @@ namespace FSMC3
 		FSMC3::StorageController storage;
 		void cmdReport();
 		void cmdStatic();
+		void errorState();
 
 	public:
 		Handler(FSMC3Config::Hardware *hardware_in, FSMC3Config::fwversion *version_in, SPIClass *SPI_in);

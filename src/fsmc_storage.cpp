@@ -24,11 +24,18 @@ FSMC3::StorageController::StorageController(FSMC3::Controller *controller_in, FS
 	memcpy(&dataSystem.version, version_in, BYTECOUNT_VERSION);
 }
 
-void FSMC3::StorageController::init()
+bool FSMC3::StorageController::init()
 {
-	flash.setClock(10000000);
-	flash.begin();
-	storageToSystem();
+	flash.setClock(100000);
+	if (!flash.begin())
+	{
+		return false;
+	}
+	else
+	{
+		storageToSystem();
+		return true;
+	}
 }
 
 void FSMC3::StorageController::systemToStorage()

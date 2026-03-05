@@ -43,7 +43,7 @@ namespace FSMC3
 
 	public:
 		StorageController(FSMC3::Controller *controller_in, FSMC3Config::fwversion *version_in, int16_t pinCS_in);
-		void init();
+		bool init();
 		void systemToStorage();
 		void storageToSystem();
 		void eepromWipe();

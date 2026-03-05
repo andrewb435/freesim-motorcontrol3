@@ -30,6 +30,7 @@ namespace FSMC3Config
 		int16_t pidFrequency;
 		int16_t pidLPFCutoff;
 		int16_t spiFlashCS;
+		int16_t errorLEDpin;
 	};
 	struct Driver
 	{

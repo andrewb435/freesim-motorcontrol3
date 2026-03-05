@@ -7,7 +7,7 @@ namespace FSMC3Config
 		  hwtimer3{TIM3},
 		  hwtimer4{TIM4},
 		  hwtimer5{TIM5},
-		  spi_settings{1000000, MT6835_BITORDER, SPI_MODE3},
+		  spi_settings{100000, MT6835_BITORDER, SPI_MODE3},
 		  configSystem{
 			  .debugPosition = false,
 			  .debugPID = false,
@@ -20,8 +20,9 @@ namespace FSMC3Config
 			  .commandBitDepth = 12,
 			  .spiSettings = &spi_settings,
 			  .pidFrequency = 10000, // 10kHz
-			  .pidLPFCutoff = 100,
-			  .spiFlashCS = PA4}, // 100Hz // W25Q64JV_IQ 8MB
+			  .pidLPFCutoff = 100,	 // 100Hz
+			  .spiFlashCS = PA4,	 // W25Q64JV_IQ 8MB
+			  .errorLEDpin = PB12},
 		  configDrivers{
 			  FSMC3Config::Driver{
 				  .enablePin = PB8,
@@ -55,7 +56,7 @@ namespace FSMC3Config
 			  FSMC3Config::Axis{
 				  .flipABZSPIDir = false,
 				  .invertFeedbackDirection = false,
-				  .invertMotorDirection = true,
+				  .invertMotorDirection = false,
 				  .rangeDegrees = 80,
 				  .encoderPPR = 16384,
 				  .encoderPinA = PB4, // TIM3 CH1 AF02
